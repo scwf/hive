@@ -102,11 +102,9 @@ POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-09,hr=12).value SIMPLE [
 PREHOOK: query: -- confirm result
 describe formatted analyze_srcpart PARTITION(ds='2008-04-08',hr=11)
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart
 POSTHOOK: query: -- confirm result
 describe formatted analyze_srcpart PARTITION(ds='2008-04-08',hr=11)
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
@@ -153,10 +151,8 @@ Storage Desc Params:
 	serialization.format	1                   
 PREHOOK: query: describe formatted analyze_srcpart PARTITION(ds='2008-04-08',hr=12)
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart
 POSTHOOK: query: describe formatted analyze_srcpart PARTITION(ds='2008-04-08',hr=12)
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
@@ -203,10 +199,8 @@ Storage Desc Params:
 	serialization.format	1                   
 PREHOOK: query: describe formatted analyze_srcpart PARTITION(ds='2008-04-09',hr=11)
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart
 POSTHOOK: query: describe formatted analyze_srcpart PARTITION(ds='2008-04-09',hr=11)
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
@@ -253,10 +247,8 @@ Storage Desc Params:
 	serialization.format	1                   
 PREHOOK: query: describe formatted analyze_srcpart PARTITION(ds='2008-04-09',hr=12)
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart
 POSTHOOK: query: describe formatted analyze_srcpart PARTITION(ds='2008-04-09',hr=12)
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
@@ -303,10 +295,8 @@ Storage Desc Params:
 	serialization.format	1                   
 PREHOOK: query: describe formatted analyze_srcpart
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart
 POSTHOOK: query: describe formatted analyze_srcpart
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
@@ -478,11 +468,9 @@ POSTHOOK: Lineage: analyze_srcpart_partial PARTITION(ds=2008-04-09,hr=12).value 
 PREHOOK: query: -- confirm result
 describe formatted analyze_srcpart_partial PARTITION(ds='2008-04-08',hr=11)
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart_partial
 POSTHOOK: query: -- confirm result
 describe formatted analyze_srcpart_partial PARTITION(ds='2008-04-08',hr=11)
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart_partial
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
@@ -537,10 +525,8 @@ Storage Desc Params:
 	serialization.format	1                   
 PREHOOK: query: describe formatted analyze_srcpart_partial PARTITION(ds='2008-04-08',hr=12)
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart_partial
 POSTHOOK: query: describe formatted analyze_srcpart_partial PARTITION(ds='2008-04-08',hr=12)
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart_partial
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
@@ -595,10 +581,8 @@ Storage Desc Params:
 	serialization.format	1                   
 PREHOOK: query: describe formatted analyze_srcpart_partial PARTITION(ds='2008-04-09',hr=11)
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart_partial
 POSTHOOK: query: describe formatted analyze_srcpart_partial PARTITION(ds='2008-04-09',hr=11)
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart_partial
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
@@ -653,10 +637,8 @@ Storage Desc Params:
 	serialization.format	1                   
 PREHOOK: query: describe formatted analyze_srcpart_partial PARTITION(ds='2008-04-09',hr=12)
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@analyze_srcpart_partial
 POSTHOOK: query: describe formatted analyze_srcpart_partial PARTITION(ds='2008-04-09',hr=12)
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@analyze_srcpart_partial
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=11).value SIMPLE [(srcpart)srcpart.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: analyze_srcpart PARTITION(ds=2008-04-08,hr=12).key SIMPLE [(srcpart)srcpart.FieldSchema(name:key, type:string, comment:default), ]

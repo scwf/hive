@@ -23,7 +23,6 @@ import org.apache.hadoop.hive.metastore.MetaStoreUtils;
 import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.hive.hcatalog.data.JsonSerDe;
 
@@ -96,7 +95,7 @@ public class StrictJsonWriter extends AbstractRecordWriter {
     try {
       Properties tableProps = MetaStoreUtils.getTableMetadata(tbl);
       JsonSerDe serde = new JsonSerDe();
-      SerDeUtils.initializeSerDe(serde, conf, tableProps, null);
+      serde.initialize(conf, tableProps);
       return serde;
     } catch (SerDeException e) {
       throw new SerializationError("Error initializing serde " + JsonSerDe.class.getName(), e);

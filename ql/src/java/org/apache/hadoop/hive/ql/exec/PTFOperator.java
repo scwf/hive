@@ -21,9 +21,7 @@ package org.apache.hadoop.hive.ql.exec;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -181,8 +179,8 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable {
 	}
 
 	protected void processInputPartition() throws HiveException {
-    Iterator<Object> pItr = executeChain(inputPart);
-
+	  PTFPartition outPart = executeChain(inputPart);
+	  PTFPartitionIterator<Object> pItr = outPart.iterator();
     while (pItr.hasNext()) {
       Object oRow = pItr.next();
       forward(oRow, outputObjInspector);
@@ -191,11 +189,8 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable {
 
 	protected void processMapFunction() throws HiveException {
 	  PartitionedTableFunctionDef tDef = conf.getStartOfChain();
-    
-    Iterator<Object> pItr = tDef.getTFunction().canIterateOutput() ? 
-        tDef.getTFunction().transformRawInputIterator(inputPart.iterator()) :
-          tDef.getTFunction().transformRawInput(inputPart).iterator();
-    
+    PTFPartition outPart = tDef.getTFunction().transformRawInput(inputPart);
+    PTFPartitionIterator<Object> pItr = outPart.iterator();
     while (pItr.hasNext()) {
       Object oRow = pItr.next();
       forward(oRow, outputObjInspector);
@@ -230,9 +225,9 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable {
    * @return
    * @throws HiveException
    */
-  private Iterator<Object> executeChain(PTFPartition part)
+  private PTFPartition executeChain(PTFPartition part)
       throws HiveException {
-    Stack<PartitionedTableFunctionDef> fnDefs = new Stack<PartitionedTableFunctionDef>();
+    Deque<PartitionedTableFunctionDef> fnDefs = new ArrayDeque<PartitionedTableFunctionDef>();
     PTFInputDef iDef = conf.getFuncDef();
 
     while (iDef instanceof PartitionedTableFunctionDef) {
@@ -241,21 +236,11 @@ public class PTFOperator extends Operator<PTFDesc> implements Serializable {
     }
 
     PartitionedTableFunctionDef currFnDef;
-    int i = fnDefs.size();
-    while (i > 1) {
+    while (!fnDefs.isEmpty()) {
       currFnDef = fnDefs.pop();
       part = currFnDef.getTFunction().execute(part);
-      i--;
     }
-
-    currFnDef = fnDefs.pop();
-    if (!currFnDef.getTFunction().canIterateOutput()) {
-      part = currFnDef.getTFunction().execute(part);
-      return part.iterator();
-    } else {
-      return currFnDef.getTFunction().iterator(part.iterator());
-    }
-
+    return part;
   }
 
 

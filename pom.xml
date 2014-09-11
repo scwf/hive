@@ -21,7 +21,7 @@
   </parent>
   <groupId>org.apache.hive</groupId>
   <artifactId>hive</artifactId>
-  <version>0.14.0-SNAPSHOT</version>
+  <version>0.13.1</version>
   <packaging>pom</packaging>
 
   <name>Hive</name>
@@ -51,20 +51,16 @@
   </modules>
 
   <properties>
-    <hive.version.shortname>0.14.0</hive.version.shortname>
+    <hive.version.shortname>0.13.1</hive.version.shortname>
 
     <!-- Build Properties -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.useIncrementalCompilation>false</maven.compiler.useIncrementalCompilation>
-    <maven.repo.local>${settings.localRepository}</maven.repo.local>
+    <maven.repo.local>${user.home}/.m2/repository</maven.repo.local>
     <hive.path.to.root>.</hive.path.to.root>
 
     <!-- Test Properties -->
-    <test.extra.path></test.extra.path>
-    <test.hive.hadoop.classpath>${maven.test.classpath}</test.hive.hadoop.classpath>
-    <test.log4j.scheme>file://</test.log4j.scheme>
     <test.tmp.dir>${project.build.directory}/tmp</test.tmp.dir>
-    <test.tmp.dir.uri>file://${test.tmp.dir}</test.tmp.dir.uri>
     <test.warehouse.dir>${project.build.directory}/warehouse</test.warehouse.dir>
     <test.warehouse.scheme>pfile://</test.warehouse.scheme>
 
@@ -107,7 +103,6 @@
     <hadoop-20.version>0.20.2</hadoop-20.version>
     <hadoop-20S.version>1.2.1</hadoop-20S.version>
     <hadoop-23.version>2.3.0</hadoop-23.version>
-    <hadoop.bin.path>${basedir}/${hive.path.to.root}/testutils/hadoop</hadoop.bin.path>
     <hbase.hadoop1.version>0.96.0-hadoop1</hbase.hadoop1.version>
     <hbase.hadoop2.version>0.96.0-hadoop2</hbase.hadoop2.version>
     <!-- httpcomponents are not always in version sync -->
@@ -137,7 +132,7 @@
         requires netty < 3.6.0 we force hadoops version
       -->
     <netty.version>3.4.0.Final</netty.version>
-    <parquet.version>1.4.0</parquet.version>
+    <parquet.version>1.3.2</parquet.version>
     <pig.version>0.12.0</pig.version>
     <protobuf.version>2.5.0</protobuf.version>
     <stax.version>1.0.1</stax.version>
@@ -151,7 +146,6 @@
     <xerces.version>2.9.1</xerces.version>
     <zookeeper.version>3.4.5</zookeeper.version>
     <jpam.version>1.1</jpam.version>
-    <felix.version>2.4.0</felix.version>
   </properties>
 
   <repositories>
@@ -635,11 +629,6 @@
             </dependency>
           </dependencies>
         </plugin>
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <version>${felix.version}</version>
-        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -718,6 +707,9 @@
             <exclude>**/TestHiveServer2Concurrency.java</exclude>
             <exclude>**/TestHiveMetaStore.java</exclude>
           </excludes>
+	  <includes>
+		  <include>**/${testPackage}/*.java</include>
+	  </includes>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
           <reuseForks>false</reuseForks>
           <failIfNoTests>false</failIfNoTests>
@@ -730,8 +722,7 @@
             <TZ>US/Pacific</TZ>
             <LANG>en_US.UTF-8</LANG>
             <HADOOP_CLASSPATH>${test.tmp.dir}/conf:${basedir}/${hive.path.to.root}/conf</HADOOP_CLASSPATH>
-            <HIVE_HADOOP_TEST_CLASSPATH>${test.hive.hadoop.classpath}</HIVE_HADOOP_TEST_CLASSPATH>
-            <PATH>${env.PATH}${test.extra.path}</PATH>
+            <HIVE_HADOOP_TEST_CLASSPATH>${maven.test.classpath}</HIVE_HADOOP_TEST_CLASSPATH>
           </environmentVariables>
           <systemPropertyVariables>
             <build.dir>${project.build.directory}</build.dir>
@@ -740,7 +731,7 @@
             <!-- required by a few tests to find the derby jar -->
             <derby.version>${derby.version}</derby.version>
             <derby.stream.error.file>${test.tmp.dir}/derby.log</derby.stream.error.file>
-            <hadoop.bin.path>${hadoop.bin.path}</hadoop.bin.path>
+            <hadoop.bin.path>${basedir}/${hive.path.to.root}/testutils/hadoop</hadoop.bin.path>
             <!-- required by Hadoop's JobHistory -->
             <hadoop.log.dir>${test.tmp.dir}</hadoop.log.dir>
             <hive.root>${basedir}/${hive.path.to.root}/</hive.root>
@@ -748,7 +739,7 @@
             <!-- required for hive-exec jar path and tests which reference a jar -->
             <maven.local.repository>${maven.repo.local}</maven.local.repository>
             <mapred.job.tracker>local</mapred.job.tracker>
-            <log4j.configuration>${test.log4j.scheme}${test.tmp.dir}/conf/hive-log4j.properties</log4j.configuration>
+            <log4j.configuration>file://${test.tmp.dir}/conf/hive-log4j.properties</log4j.configuration>
             <log4j.debug>true</log4j.debug>
             <!-- don't diry up /tmp -->
             <java.io.tmpdir>${test.tmp.dir}</java.io.tmpdir>
@@ -758,14 +749,11 @@
             <test.data.files>${basedir}/${hive.path.to.root}/data/files</test.data.files>
             <test.data.dir>${basedir}/${hive.path.to.root}/data/files</test.data.dir>
             <test.tmp.dir>${test.tmp.dir}</test.tmp.dir>
-            <test.tmp.dir.uri>${test.tmp.dir.uri}</test.tmp.dir.uri>
             <test.dfs.mkdir>${test.dfs.mkdir}</test.dfs.mkdir>
             <test.output.overwrite>${test.output.overwrite}</test.output.overwrite>
             <test.warehouse.dir>${test.warehouse.scheme}${test.warehouse.dir}</test.warehouse.dir>
-            <java.net.preferIPv4Stack>true</java.net.preferIPv4Stack>
             <!-- EnforceReadOnlyTables hook and QTestUtil -->
             <test.src.tables>src,src1,srcbucket,srcbucket2,src_json,src_thrift,src_sequencefile,srcpart,alltypesorc</test.src.tables>
-            <java.security.krb5.conf>${test.tmp.dir}/conf/krb5.conf</java.security.krb5.conf>
           </systemPropertyVariables>
         </configuration>
       </plugin>
@@ -977,11 +965,6 @@
             <version>${hadoop-23.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-minikdc</artifactId>
-            <version>${hadoop-23.version}</version>
-          </dependency>
-          <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-common</artifactId>
             <version>${hbase.hadoop2.version}</version>
@@ -1008,50 +991,6 @@
           </dependency>
         </dependencies>
       </dependencyManagement>
-    </profile>
-    <profile>
-      <!-- Windows-specific settings to allow unit tests to work -->
-      <id>windows-test</id>
-      <activation>
-        <os>
-          <family>Windows</family>
-       </os>
-      </activation>
-      <build>
-        <plugins>
-          <!-- maven.test.classpath (used for HIVE_HADOOP_TEST_CLASSPATH) exceeds the 8K Windows -->
-          <!-- command shell limit which causes tests which call hadoop command to fail.         -->
-          <!-- Workaround is to copy all necessary jars to a single location to shorten the      -->
-          <!-- the length of the environment variable.                                           -->
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <version>2.8</version>
-            <executions>
-              <execution>
-                <id>copy-dependencies</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>copy-dependencies</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${project.build.directory}/deplibs/</outputDirectory>
-                  <overWriteReleases>false</overWriteReleases>
-                  <overWriteSnapshots>false</overWriteSnapshots>
-                  <overWriteIfNewer>true</overWriteIfNewer>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-      <properties>
-        <hadoop.bin.path>${basedir}/${hive.path.to.root}/testutils/hadoop.cmd</hadoop.bin.path>
-        <test.extra.path>;${env.HADOOP_HOME}/bin</test.extra.path>
-        <test.hive.hadoop.classpath>${project.build.directory}/deplibs/*</test.hive.hadoop.classpath>
-        <test.tmp.dir.uri>file:///${test.tmp.dir}</test.tmp.dir.uri>
-        <test.log4j.scheme>file:/</test.log4j.scheme>
-      </properties>
     </profile>
   </profiles>
 </project>

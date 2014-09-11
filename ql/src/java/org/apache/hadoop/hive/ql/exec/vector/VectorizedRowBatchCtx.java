@@ -43,7 +43,6 @@ import org.apache.hadoop.hive.ql.plan.PartitionDesc;
 import org.apache.hadoop.hive.serde2.ColumnProjectionUtils;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorConverters;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
@@ -177,8 +176,7 @@ public class VectorizedRowBatchCtx {
 
     Class serdeclass = hiveConf.getClassByName(part.getSerdeClassName());
     Deserializer partDeserializer = (Deserializer) serdeclass.newInstance(); 
-    SerDeUtils.initializeSerDe(partDeserializer, hiveConf, part.getTableDesc().getProperties(),
-                               partProps);
+    partDeserializer.initialize(hiveConf, partProps);
     StructObjectInspector partRawRowObjectInspector = (StructObjectInspector) partDeserializer
         .getObjectInspector();
 
@@ -594,17 +592,4 @@ public class VectorizedRowBatchCtx {
     }
   }
 
-  public VectorColumnAssign[] buildObjectAssigners(VectorizedRowBatch outputBatch)
-        throws HiveException {
-    List<? extends StructField> fieldRefs = rowOI.getAllStructFieldRefs();
-    assert outputBatch.numCols == fieldRefs.size();
-    VectorColumnAssign[] assigners = new VectorColumnAssign[fieldRefs.size()];
-    for(int i = 0; i < assigners.length; ++i) {
-        StructField fieldRef = fieldRefs.get(i);
-        ObjectInspector fieldOI = fieldRef.getFieldObjectInspector();
-        assigners[i] = VectorColumnAssignFactory.buildObjectAssign(
-                outputBatch, i, fieldOI);
-    }
-    return assigners;
-  }
 }

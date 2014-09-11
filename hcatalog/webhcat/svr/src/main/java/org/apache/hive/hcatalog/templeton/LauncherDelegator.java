@@ -44,7 +44,7 @@ import org.apache.hive.hcatalog.templeton.tool.ZooKeeperStorage;
 public class LauncherDelegator extends TempletonDelegator {
   private static final Log LOG = LogFactory.getLog(LauncherDelegator.class);
   protected String runAs = null;
-  static public enum JobType {JAR, STREAMING, PIG, HIVE, SQOOP}
+  static public enum JobType {JAR, STREAMING, PIG, HIVE}
   private boolean secureMeatastoreAccess = false;
 
   public LauncherDelegator(AppConfig appConf) {

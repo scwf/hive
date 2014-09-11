@@ -148,9 +148,9 @@ public class GetColumnsOperation extends MetadataOperation {
                 column.getName(), // COLUMN_NAME
                 column.getType().toJavaSQLType(), // DATA_TYPE
                 column.getTypeName(), // TYPE_NAME
-                column.getTypeDescriptor().getColumnSize(), // COLUMN_SIZE
+                column.getType().getColumnSize(), // COLUMN_SIZE
                 null, // BUFFER_LENGTH, unused
-                column.getTypeDescriptor().getDecimalDigits(), // DECIMAL_DIGITS
+                column.getType().getDecimalDigits(), // DECIMAL_DIGITS
                 column.getType().getNumPrecRadix(), // NUM_PREC_RADIX
                 DatabaseMetaData.columnNullable, // NULLABLE
                 column.getComment(), // REMARKS

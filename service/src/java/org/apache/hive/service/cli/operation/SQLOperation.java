@@ -388,7 +388,7 @@ public class SQLOperation extends ExecuteStatementOperation {
         LOG.debug("Column types: " + types);
         props.setProperty(serdeConstants.LIST_COLUMN_TYPES, types);
       }
-      SerDeUtils.initializeSerDe(serde, new HiveConf(), props, null);
+      serde.initialize(new HiveConf(), props);
 
     } catch (Exception ex) {
       ex.printStackTrace();

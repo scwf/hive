@@ -38,7 +38,6 @@ import org.apache.hadoop.hive.ql.plan.api.OperatorType;
 import org.apache.hadoop.hive.serde2.ByteStream.Output;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.util.ReflectionUtils;
 
 /**
@@ -118,7 +117,7 @@ public class MapJoinOperator extends AbstractMapJoinOperator<MapJoinDesc> implem
     TableDesc keyTableDesc = conf.getKeyTblDesc();
     SerDe keySerializer = (SerDe) ReflectionUtils.newInstance(keyTableDesc.getDeserializerClass(),
         null);
-    SerDeUtils.initializeSerDe(keySerializer, null, keyTableDesc.getProperties(), null);
+    keySerializer.initialize(null, keyTableDesc.getProperties());
     MapJoinObjectSerDeContext keyContext = new MapJoinObjectSerDeContext(keySerializer, false);
     for (int pos = 0; pos < order.length; pos++) {
       if (pos == posBigTable) {
@@ -132,7 +131,7 @@ public class MapJoinOperator extends AbstractMapJoinOperator<MapJoinDesc> implem
       }
       SerDe valueSerDe = (SerDe) ReflectionUtils.newInstance(valueTableDesc.getDeserializerClass(),
           null);
-      SerDeUtils.initializeSerDe(valueSerDe, null, valueTableDesc.getProperties(), null);
+      valueSerDe.initialize(null, valueTableDesc.getProperties());
       MapJoinObjectSerDeContext valueContext = new MapJoinObjectSerDeContext(valueSerDe, hasFilter(pos));
       mapJoinTableSerdes[pos] = new MapJoinTableContainerSerDe(keyContext, valueContext);
     }
@@ -249,10 +248,8 @@ public class MapJoinOperator extends AbstractMapJoinOperator<MapJoinDesc> implem
           storage[pos] = null;
         }
       }
-    } catch (Exception e) {
-      String msg = "Unxpected exception: " + e.getMessage();
-      LOG.error(msg, e);
-      throw new HiveException(msg, e);
+    } catch (SerDeException e) {
+      throw new HiveException(e);
     }
   }
 

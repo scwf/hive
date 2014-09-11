@@ -61,7 +61,6 @@ import org.apache.hadoop.mapreduce.TaskID;
 import org.apache.hadoop.util.Progressable;
 import org.apache.hadoop.mapred.lib.TotalOrderPartitioner;
 import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.hadoop.util.VersionInfo;
 
 
 /**
@@ -177,12 +176,6 @@ public class Hadoop20SShims extends HadoopShimsSecure {
   public MiniMrShim getMiniMrCluster(Configuration conf, int numberOfTaskTrackers,
                                      String nameNode, int numDir) throws IOException {
     return new MiniMrShim(conf, numberOfTaskTrackers, nameNode, numDir);
-  }
-
-  @Override
-  public MiniMrShim getMiniTezCluster(Configuration conf, int numberOfTaskTrackers,
-                                      String nameNode, int numDir) throws IOException {
-    throw new IOException("Cannot run tez on current hadoop, Version: " + VersionInfo.getVersion());
   }
 
   /**
@@ -353,10 +346,6 @@ public class Hadoop20SShims extends HadoopShimsSecure {
           return DistributedCache.CACHE_FILES;
         case CACHE_SYMLINK:
           return DistributedCache.CACHE_SYMLINK;
-        case CLASSPATH_ARCHIVES:
-          return "mapred.job.classpath.archives";
-        case CLASSPATH_FILES:
-          return "mapred.job.classpath.files";
       }
 
       return "";
@@ -430,5 +419,16 @@ public class Hadoop20SShims extends HadoopShimsSecure {
   @Override
   public Configuration getConfiguration(org.apache.hadoop.mapreduce.JobContext context) {
     return context.getConfiguration();
+  }
+
+  @Override
+  public FileSystem getNonCachedFileSystem(URI uri, Configuration conf) throws IOException {
+    boolean origDisableHDFSCache =
+        conf.getBoolean("fs." + uri.getScheme() + ".impl.disable.cache", false);
+    // hadoop-1 compatible flag.
+    conf.setBoolean("fs." + uri.getScheme() + ".impl.disable.cache", true);
+    FileSystem fs = FileSystem.get(uri, conf);
+    conf.setBoolean("fs." + uri.getScheme() + ".impl.disable.cache", origDisableHDFSCache);
+    return fs;
   }
 }

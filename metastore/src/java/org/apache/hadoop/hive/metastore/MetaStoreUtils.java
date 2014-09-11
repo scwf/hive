@@ -60,7 +60,6 @@ import org.apache.hadoop.hive.metastore.api.hive_metastoreConstants;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.MapObjectInspector;
@@ -189,8 +188,13 @@ public class MetaStoreUtils {
         // Let's try to populate those stats that don't require full scan.
         LOG.info("Updating table stats fast for " + tbl.getTableName());
         FileStatus[] fileStatus = wh.getFileStatusesForUnpartitionedTable(db, tbl);
-        populateQuickStats(fileStatus, params);
-        LOG.info("Updated size of table " + tbl.getTableName() +" to "+ params.get(StatsSetupConst.TOTAL_SIZE));
+        params.put(StatsSetupConst.NUM_FILES, Integer.toString(fileStatus.length));
+        long tableSize = 0L;
+        for (FileStatus status : fileStatus) {
+          tableSize += status.getLen();
+        }
+        params.put(StatsSetupConst.TOTAL_SIZE, Long.toString(tableSize));
+        LOG.info("Updated size of table " + tbl.getTableName() +" to "+ Long.toString(tableSize));
         if(!params.containsKey(StatsSetupConst.STATS_GENERATED_VIA_STATS_TASK)) {
           // invalidate stats requiring scan since this is a regular ddl alter case
           for (String stat : StatsSetupConst.statsRequireCompute) {
@@ -206,20 +210,6 @@ public class MetaStoreUtils {
       updated = true;
     }
     return updated;
-  }
-
-  public static void populateQuickStats(FileStatus[] fileStatus, Map<String, String> params) {
-    int numFiles = 0;
-    long tableSize = 0L;
-    for (FileStatus status : fileStatus) {
-      // don't take directories into account for quick stats
-      if (!status.isDir()) {
-        tableSize += status.getLen();
-        numFiles += 1;
-      }
-    }
-    params.put(StatsSetupConst.NUM_FILES, Integer.toString(numFiles));
-    params.put(StatsSetupConst.TOTAL_SIZE, Long.toString(tableSize));
   }
 
   // check if stats need to be (re)calculated
@@ -294,8 +284,13 @@ public class MetaStoreUtils {
         // populate those statistics that don't require a full scan of the data.
         LOG.warn("Updating partition stats fast for: " + part.getTableName());
         FileStatus[] fileStatus = wh.getFileStatusesForSD(part.getSd());
-        populateQuickStats(fileStatus, params);
-        LOG.warn("Updated size to " + params.get(StatsSetupConst.TOTAL_SIZE));
+        params.put(StatsSetupConst.NUM_FILES, Integer.toString(fileStatus.length));
+        long partSize = 0L;
+        for (int i = 0; i < fileStatus.length; i++) {
+          partSize += fileStatus[i].getLen();
+        }
+        params.put(StatsSetupConst.TOTAL_SIZE, Long.toString(partSize));
+        LOG.warn("Updated size to " + Long.toString(partSize));
         if(!params.containsKey(StatsSetupConst.STATS_GENERATED_VIA_STATS_TASK)) {
           // invalidate stats requiring scan since this is a regular ddl alter case
           for (String stat : StatsSetupConst.statsRequireCompute) {
@@ -341,7 +336,7 @@ public class MetaStoreUtils {
     try {
       Deserializer deserializer = ReflectionUtils.newInstance(conf.getClassByName(lib).
         asSubclass(Deserializer.class), conf);
-      SerDeUtils.initializeSerDe(deserializer, conf, MetaStoreUtils.getTableMetadata(table), null);
+      deserializer.initialize(conf, MetaStoreUtils.getTableMetadata(table));
       return deserializer;
     } catch (RuntimeException e) {
       throw e;
@@ -377,8 +372,7 @@ public class MetaStoreUtils {
     try {
       Deserializer deserializer = ReflectionUtils.newInstance(conf.getClassByName(lib).
         asSubclass(Deserializer.class), conf);
-      SerDeUtils.initializeSerDe(deserializer, conf, MetaStoreUtils.getTableMetadata(table),
-                                 MetaStoreUtils.getPartitionMetadata(part, table));
+      deserializer.initialize(conf, MetaStoreUtils.getPartitionMetadata(part, table));
       return deserializer;
     } catch (RuntimeException e) {
       throw e;
@@ -1473,8 +1467,6 @@ public class MetaStoreUtils {
   /**
    * Read and return the meta store Sasl configuration. Currently it uses the default
    * Hadoop SASL configuration and can be configured using "hadoop.rpc.protection"
-   * HADOOP-10211, made a backward incompatible change due to which this call doesn't
-   * work with Hadoop 2.4.0 and later.
    * @param conf
    * @return The SASL configuration
    */

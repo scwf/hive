@@ -184,18 +184,18 @@ public class MapOperator extends Operator<MapWork> implements Serializable, Clon
     MapOpCtx opCtx = new MapOpCtx();
     // Use table properties in case of unpartitioned tables,
     // and the union of table properties and partition properties, with partition
-    // taking precedence, in the case of partitioned tables
-    Properties overlayedProps =
-        SerDeUtils.createOverlayedProperties(td.getProperties(), pd.getProperties());
+    // taking precedence
+    Properties partProps = isPartitioned(pd) ?
+        pd.getOverlayedProperties() : pd.getTableDesc().getProperties();
 
     Map<String, String> partSpec = pd.getPartSpec();
 
-    opCtx.tableName = String.valueOf(overlayedProps.getProperty("name"));
+    opCtx.tableName = String.valueOf(partProps.getProperty("name"));
     opCtx.partName = String.valueOf(partSpec);
 
     Class serdeclass = hconf.getClassByName(pd.getSerdeClassName());
     opCtx.deserializer = (Deserializer) serdeclass.newInstance();
-    SerDeUtils.initializeSerDe(opCtx.deserializer, hconf, td.getProperties(), pd.getProperties());
+    opCtx.deserializer.initialize(hconf, partProps);
 
     StructObjectInspector partRawRowObjectInspector =
         (StructObjectInspector) opCtx.deserializer.getObjectInspector();
@@ -208,12 +208,11 @@ public class MapOperator extends Operator<MapWork> implements Serializable, Clon
     // Next check if this table has partitions and if so
     // get the list of partition names as well as allocate
     // the serdes for the partition columns
-    String pcols = overlayedProps.getProperty(hive_metastoreConstants.META_TABLE_PARTITION_COLUMNS);
+    String pcols = partProps.getProperty(hive_metastoreConstants.META_TABLE_PARTITION_COLUMNS);
     
     if (pcols != null && pcols.length() > 0) {
       String[] partKeys = pcols.trim().split("/");
-      String pcolTypes = overlayedProps
-          .getProperty(hive_metastoreConstants.META_TABLE_PARTITION_COLUMN_TYPES);
+      String pcolTypes = partProps.getProperty(hive_metastoreConstants.META_TABLE_PARTITION_COLUMN_TYPES);      
       String[] partKeyTypes = pcolTypes.trim().split(":");
       
       if (partKeys.length > partKeyTypes.length) {
@@ -301,9 +300,11 @@ public class MapOperator extends Operator<MapWork> implements Serializable, Clon
         PartitionDesc pd = conf.getPathToPartitionInfo().get(onefile);
         TableDesc tableDesc = pd.getTableDesc();
         Properties tblProps = tableDesc.getProperties();
+        // If the partition does not exist, use table properties
+        Properties partProps = isPartitioned(pd) ? pd.getOverlayedProperties() : tblProps;
         Class sdclass = hconf.getClassByName(pd.getSerdeClassName());
         Deserializer partDeserializer = (Deserializer) sdclass.newInstance();
-        SerDeUtils.initializeSerDe(partDeserializer, hconf, tblProps, pd.getProperties());
+        partDeserializer.initialize(hconf, partProps);
         StructObjectInspector partRawRowObjectInspector = (StructObjectInspector) partDeserializer
             .getObjectInspector();
 
@@ -312,7 +313,7 @@ public class MapOperator extends Operator<MapWork> implements Serializable, Clon
             (identityConverterTableDesc.contains(tableDesc))) {
             sdclass = hconf.getClassByName(tableDesc.getSerdeClassName());
             Deserializer tblDeserializer = (Deserializer) sdclass.newInstance();
-            SerDeUtils.initializeSerDe(tblDeserializer, hconf, tblProps, null);
+          tblDeserializer.initialize(hconf, tblProps);
           tblRawRowObjectInspector =
               (StructObjectInspector) ObjectInspectorConverters.getConvertedOI(
                   partRawRowObjectInspector,

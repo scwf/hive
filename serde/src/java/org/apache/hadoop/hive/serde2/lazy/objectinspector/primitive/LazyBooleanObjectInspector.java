@@ -28,8 +28,6 @@ import org.apache.hadoop.io.BooleanWritable;
 public class LazyBooleanObjectInspector extends
     AbstractPrimitiveLazyObjectInspector<BooleanWritable> implements
     BooleanObjectInspector {
-  // Whether characters, such as 't/T', 'f/F', and '1/0' are interpreted as valid boolean literals.
-  private boolean extendedLiteral = false;
 
   LazyBooleanObjectInspector() {
     super(TypeInfoFactory.booleanTypeInfo);
@@ -49,13 +47,4 @@ public class LazyBooleanObjectInspector extends
   public Object getPrimitiveJavaObject(Object o) {
     return o == null ? null : Boolean.valueOf(get(o));
   }
-
-  public boolean isExtendedLiteral() {
-    return extendedLiteral;
-  }
-
-  public void setExtendedLiteral(boolean extendedLiteral) {
-    this.extendedLiteral = extendedLiteral;
-  }
-
 }

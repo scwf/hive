@@ -20,7 +20,6 @@ package org.apache.hadoop.hive.conf;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hive.conf.HiveConf.ConfVars;
-import org.apache.hadoop.util.Shell;
 import org.apache.hive.common.util.HiveTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,13 +35,7 @@ public class TestHiveConf {
   @Test
   public void testHiveSitePath() throws Exception {
     String expectedPath = HiveTestUtils.getFileFromClasspath("hive-site.xml");
-    String hiveSiteLocation = new HiveConf().getHiveSiteLocation().getPath();
-    if (Shell.WINDOWS) {
-      // Do case-insensitive comparison on Windows, as drive letter can have different case.
-      expectedPath = expectedPath.toLowerCase();
-      hiveSiteLocation = hiveSiteLocation.toLowerCase();
-    }
-    Assert.assertEquals(expectedPath, hiveSiteLocation);
+    Assert.assertEquals(expectedPath, new HiveConf().getHiveSiteLocation().getPath());
   }
 
   private void checkHadoopConf(String name, String expectedHadoopVal) throws Exception {

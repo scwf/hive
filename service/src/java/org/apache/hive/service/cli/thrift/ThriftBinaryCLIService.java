@@ -39,7 +39,7 @@ public class ThriftBinaryCLIService extends ThriftCLIService {
   @Override
   public void run() {
     try {
-      hiveAuthFactory = new HiveAuthFactory(hiveConf);
+      hiveAuthFactory = new HiveAuthFactory();
       TTransportFactory  transportFactory = hiveAuthFactory.getAuthTransFactory();
       TProcessorFactory processorFactory = hiveAuthFactory.getAuthProcFactory(this);
 

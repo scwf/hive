@@ -14,10 +14,7 @@
 package org.apache.hadoop.hive.ql.io.parquet;
 
 import java.io.IOException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.hive.ql.exec.Utilities;
-import org.apache.hadoop.hive.ql.exec.vector.VectorizedInputFormatInterface;
+
 import org.apache.hadoop.hive.ql.io.parquet.read.DataWritableReadSupport;
 import org.apache.hadoop.hive.ql.io.parquet.read.ParquetRecordReaderWrapper;
 import org.apache.hadoop.io.ArrayWritable;
@@ -32,14 +29,9 @@ import parquet.hadoop.ParquetInputFormat;
  * A Parquet InputFormat for Hive (with the deprecated package mapred)
  *
  */
-public class MapredParquetInputFormat extends FileInputFormat<Void, ArrayWritable>
-    implements VectorizedInputFormatInterface {
-
-  private static final Log LOG = LogFactory.getLog(MapredParquetInputFormat.class);
+public class MapredParquetInputFormat extends FileInputFormat<Void, ArrayWritable> {
 
   private final ParquetInputFormat<ArrayWritable> realInput;
-
-  private final transient VectorizedParquetInputFormat vectorizedSelf;
 
   public MapredParquetInputFormat() {
     this(new ParquetInputFormat<ArrayWritable>(DataWritableReadSupport.class));
@@ -47,10 +39,8 @@ public class MapredParquetInputFormat extends FileInputFormat<Void, ArrayWritabl
 
   protected MapredParquetInputFormat(final ParquetInputFormat<ArrayWritable> inputFormat) {
     this.realInput = inputFormat;
-    vectorizedSelf = new VectorizedParquetInputFormat(inputFormat);
   }
 
-  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
   public org.apache.hadoop.mapred.RecordReader<Void, ArrayWritable> getRecordReader(
       final org.apache.hadoop.mapred.InputSplit split,
@@ -58,19 +48,7 @@ public class MapredParquetInputFormat extends FileInputFormat<Void, ArrayWritabl
       final org.apache.hadoop.mapred.Reporter reporter
       ) throws IOException {
     try {
-      if (Utilities.isVectorMode(job)) {
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("Using vectorized record reader");
-        }
-        return (RecordReader) vectorizedSelf.getRecordReader(split, job, reporter);
-      }
-      else {
-        if (LOG.isDebugEnabled()) {
-          LOG.debug("Using row-mode record reader");
-        }
-        return (RecordReader<Void, ArrayWritable>)
-          new ParquetRecordReaderWrapper(realInput, split, job, reporter);
-      }
+      return (RecordReader<Void, ArrayWritable>) new ParquetRecordReaderWrapper(realInput, split, job, reporter);
     } catch (final InterruptedException e) {
       throw new RuntimeException("Cannot create a RecordReaderWrapper", e);
     }

@@ -55,8 +55,6 @@ public class TestSSL {
   private Connection hs2Conn = null;
   private String dataFileDir = conf.get("test.data.files");
   private Map<String, String> confOverlay;
-  private final String SSL_CONN_PARAMS = ";ssl=true;sslTrustStore=" + dataFileDir + File.separator +
-      TRUST_STORE_NAME + ";trustStorePassword=" + KEY_STORE_PASSWORD;
 
   @BeforeClass
   public static void beforeTest() throws Exception {
@@ -98,8 +96,9 @@ public class TestSSL {
     miniHS2.start(confOverlay);
     DriverManager.setLoginTimeout(4);
     try {
-      hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL("default", SSL_CONN_PARAMS),
-          System.getProperty("user.name"), "bar");
+      hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL() + ";ssl=true;sslTrustStore=" +
+          dataFileDir + File.separator + TRUST_STORE_NAME + ";trustStorePassword=" +
+          KEY_STORE_PASSWORD, System.getProperty("user.name"), "bar");
       fail("SSL connection should fail with NON-SSL server");
     } catch (SQLException e) {
       // expected error
@@ -124,7 +123,11 @@ public class TestSSL {
     setHttpConfOverlay(confOverlay);
     miniHS2.start(confOverlay);
     try {
-      hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL("default", SSL_CONN_PARAMS),
+      hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL() +
+          ";ssl=true;sslTrustStore=" + dataFileDir + File.separator +
+          TRUST_STORE_NAME + ";trustStorePassword=" + KEY_STORE_PASSWORD +
+          "?hive.server2.transport.mode=" + HS2_HTTP_MODE +
+          ";hive.server2.thrift.http.path=" + HS2_HTTP_ENDPOINT,
           System.getProperty("user.name"), "bar");
       fail("SSL connection should fail with NON-SSL server");
     } catch (SQLException e) {
@@ -132,7 +135,6 @@ public class TestSSL {
       assertEquals("08S01", e.getSQLState().trim());
     }
   }
-
 
   /***
    * Test non-SSL client with SSL server fails
@@ -167,7 +169,11 @@ public class TestSSL {
     setHttpConfOverlay(confOverlay);
     miniHS2.start(confOverlay);
     try {
-      hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL("default", ";ssl=false"),
+      hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL() +
+          ";ssl=false;sslTrustStore=" + dataFileDir + File.separator +
+          TRUST_STORE_NAME + ";trustStorePassword=" + KEY_STORE_PASSWORD +
+          "?hive.server2.transport.mode=" + HS2_HTTP_MODE +
+          ";hive.server2.thrift.http.path=" + HS2_HTTP_ENDPOINT,
           System.getProperty("user.name"), "bar");
       fail("NON SSL connection should fail with SSL server");
     } catch (SQLException e) {
@@ -190,8 +196,9 @@ public class TestSSL {
     miniHS2.start(confOverlay);
 
     // make SSL connection
-    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL("default", SSL_CONN_PARAMS),
-        System.getProperty("user.name"), "bar");
+    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL() + ";ssl=true;sslTrustStore=" +
+        dataFileDir + File.separator + TRUST_STORE_NAME + ";trustStorePassword=" +
+        KEY_STORE_PASSWORD, System.getProperty("user.name"), "bar");
     hs2Conn.close();
     miniHS2.stop();
 
@@ -199,7 +206,11 @@ public class TestSSL {
     setHttpConfOverlay(confOverlay);
     miniHS2.start(confOverlay);
     // make SSL connection
-    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL("default", SSL_CONN_PARAMS),
+    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL() +
+        ";ssl=true;sslTrustStore=" + dataFileDir + File.separator +
+        TRUST_STORE_NAME + ";trustStorePassword=" + KEY_STORE_PASSWORD +
+        "?hive.server2.transport.mode=" + HS2_HTTP_MODE +
+        ";hive.server2.thrift.http.path=" + HS2_HTTP_ENDPOINT,
         System.getProperty("user.name"), "bar");
     hs2Conn.close();
   }
@@ -228,7 +239,9 @@ public class TestSSL {
     setHttpConfOverlay(confOverlay);
     miniHS2.start(confOverlay);
     // make SSL connection
-    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL("default", SSL_CONN_PARAMS),
+    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL() +
+        ";ssl=true;" + "?hive.server2.transport.mode=" + HS2_HTTP_MODE +
+        ";hive.server2.thrift.http.path=" + HS2_HTTP_ENDPOINT,
         System.getProperty("user.name"), "bar");
     hs2Conn.close();
   }
@@ -249,8 +262,9 @@ public class TestSSL {
     Path dataFilePath = new Path(dataFileDir, "kv1.txt");
 
     // make SSL connection
-    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL("default", SSL_CONN_PARAMS),
-        System.getProperty("user.name"), "bar");
+    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL() + ";ssl=true;sslTrustStore=" +
+        dataFileDir + File.separator + TRUST_STORE_NAME + ";trustStorePassword=" +
+        KEY_STORE_PASSWORD, System.getProperty("user.name"), "bar");
 
     // Set up test data
     setupTestTableWithData(tableName, dataFilePath, hs2Conn);
@@ -283,7 +297,11 @@ public class TestSSL {
     Path dataFilePath = new Path(dataFileDir, "kv1.txt");
 
     // make SSL connection
-    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL("default", SSL_CONN_PARAMS),
+    hs2Conn = DriverManager.getConnection(miniHS2.getJdbcURL() +
+        ";ssl=true;sslTrustStore=" + dataFileDir + File.separator +
+        TRUST_STORE_NAME + ";trustStorePassword=" + KEY_STORE_PASSWORD +
+        "?hive.server2.transport.mode=" + HS2_HTTP_MODE +
+        ";hive.server2.thrift.http.path=" + HS2_HTTP_ENDPOINT,
         System.getProperty("user.name"), "bar");
 
     // Set up test data

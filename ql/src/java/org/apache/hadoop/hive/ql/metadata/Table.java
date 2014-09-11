@@ -139,7 +139,7 @@ public class Table implements Serializable {
   /**
    * Initialize an emtpy table.
    */
-  public static org.apache.hadoop.hive.metastore.api.Table
+  static org.apache.hadoop.hive.metastore.api.Table
   getEmptyTable(String databaseName, String tableName) {
     StorageDescriptor sd = new StorageDescriptor();
     {
@@ -667,14 +667,10 @@ public class Table implements Serializable {
    *
    * @param srcf
    *          Source directory
-   * @param isSrcLocal
-   *          If the source directory is LOCAL
    */
-  protected void replaceFiles(Path srcf, boolean isSrcLocal)
-      throws HiveException {
+  protected void replaceFiles(Path srcf) throws HiveException {
     Path tableDest = getPath();
-    Hive.replaceFiles(srcf, tableDest, tableDest, Hive.get().getConf(),
-        isSrcLocal);
+    Hive.replaceFiles(srcf, tableDest, tableDest, Hive.get().getConf());
   }
 
   /**
@@ -682,14 +678,12 @@ public class Table implements Serializable {
    *
    * @param srcf
    *          Files to be moved. Leaf directories or globbed file paths
-   * @param isSrcLocal
-   *          If the source directory is LOCAL
    */
-  protected void copyFiles(Path srcf, boolean isSrcLocal) throws HiveException {
+  protected void copyFiles(Path srcf) throws HiveException {
     FileSystem fs;
     try {
       fs = getDataLocation().getFileSystem(Hive.get().getConf());
-      Hive.copyFiles(Hive.get().getConf(), srcf, getPath(), fs, isSrcLocal);
+      Hive.copyFiles(Hive.get().getConf(), srcf, getPath(), fs);
     } catch (IOException e) {
       throw new HiveException("addFiles: filesystem error in check phase", e);
     }

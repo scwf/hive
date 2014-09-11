@@ -146,6 +146,7 @@ class PigHCatUtil {
     HiveConf hiveConf = new HiveConf(clazz);
 
     if (serverUri != null) {
+      hiveConf.set("hive.metastore.local", "false");
       hiveConf.setVar(HiveConf.ConfVars.METASTOREURIS, serverUri.trim());
     }
 

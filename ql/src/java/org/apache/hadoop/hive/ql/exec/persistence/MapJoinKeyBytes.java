@@ -21,8 +21,6 @@ package org.apache.hadoop.hive.ql.exec.persistence;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
-import org.apache.hadoop.util.hash.MurmurHash;
-
 /**
  * Size-optimized implementation of MapJoinKeyBase. MJK only needs to support equality and
  * hashCode, so for simple cases we can write the requisite writables that are part of the
@@ -30,7 +28,6 @@ import org.apache.hadoop.util.hash.MurmurHash;
  */
 @SuppressWarnings("deprecation")
 public class MapJoinKeyBytes extends MapJoinKey {
-  private static final MurmurHash hash = (MurmurHash)MurmurHash.getInstance();
   /**
    * First byte is field count. The rest is written using BinarySortableSerDe.
    */
@@ -54,7 +51,7 @@ public class MapJoinKeyBytes extends MapJoinKey {
 
   @Override
   public int hashCode() {
-    return hash.hash(array);
+    return Arrays.hashCode(array);
   }
 
   @Override

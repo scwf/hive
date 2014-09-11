@@ -97,7 +97,7 @@ public class TestLazyBinarySerDe extends TestCase {
     schema.setProperty(serdeConstants.LIST_COLUMN_TYPES, fieldTypes);
 
     LazyBinarySerDe serde = new LazyBinarySerDe();
-    SerDeUtils.initializeSerDe(serde, new Configuration(), schema, null);
+    serde.initialize(new Configuration(), schema);
     return serde;
   }
 

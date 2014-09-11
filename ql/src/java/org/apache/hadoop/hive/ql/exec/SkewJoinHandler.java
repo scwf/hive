@@ -38,7 +38,6 @@ import org.apache.hadoop.hive.ql.plan.OperatorDesc;
 import org.apache.hadoop.hive.ql.plan.TableDesc;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -139,7 +138,7 @@ public class SkewJoinHandler {
       try {
         SerDe serializer = (SerDe) ReflectionUtils.newInstance(tblDesc.get(
             alias).getDeserializerClass(), null);
-        SerDeUtils.initializeSerDe(serializer, null, tblDesc.get(alias).getProperties(), null);
+        serializer.initialize(null, tblDesc.get(alias).getProperties());
         tblSerializers.put((byte) i, serializer);
       } catch (SerDeException e) {
         LOG.error("Skewjoin will be disabled due to " + e.getMessage(), e);

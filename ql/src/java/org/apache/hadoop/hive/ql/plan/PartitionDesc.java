@@ -36,7 +36,6 @@ import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.ql.metadata.Partition;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.Deserializer;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.mapred.InputFormat;
 import org.apache.hadoop.util.ReflectionUtils;
 
@@ -130,7 +129,7 @@ public class PartitionDesc implements Serializable, Cloneable {
     }
     Deserializer deserializer = ReflectionUtils.newInstance(conf.getClassByName(clazzName)
         .asSubclass(Deserializer.class), conf);
-    SerDeUtils.initializeSerDe(deserializer, conf, getTableDesc().getProperties(), schema);
+    deserializer.initialize(conf, schema);
     return deserializer;
   }
 
@@ -167,6 +166,16 @@ public class PartitionDesc implements Serializable, Cloneable {
       return tableDesc.getProperties();
     }
     return properties;
+  }
+
+  public Properties getOverlayedProperties(){
+    if (tableDesc != null) {
+      Properties overlayedProps = new Properties(tableDesc.getProperties());
+      overlayedProps.putAll(getProperties());
+      return overlayedProps;
+    } else {
+      return getProperties();
+    }
   }
 
   public void setProperties(final Properties properties) {

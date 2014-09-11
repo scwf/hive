@@ -343,6 +343,59 @@ public class TestJdbcDriver2 {
     rs.close();
   }
 
+  /**
+   * This method tests whether while creating a new connection,
+   * the config variables specified in the JDBC URI are properly set for the connection.
+   * This is a test for HiveConnection#configureConnection.
+   * @throws Exception
+   */
+  @Test
+  public void testNewConnectionConfiguration() throws Exception {
+    // Start HiveServer2 with default conf
+    HiveServer2 hiveServer2 = new HiveServer2();
+    hiveServer2.init(new HiveConf());
+    hiveServer2.start();
+    Thread.sleep(3000);
+
+    // Set some conf parameters
+    String hiveConf = "hive.cli.print.header=true;hive.server2.async.exec.shutdown.timeout=20;" +
+        "hive.server2.async.exec.threads=30;hive.server2.thrift.http.max.worker.threads=15";
+    // Set some conf vars
+    String hiveVar = "stab=salesTable;icol=customerID";
+    String jdbcUri = "jdbc:hive2://localhost:10000/default" +
+        "?" + hiveConf +
+        "#" + hiveVar;
+
+    // Open a new connection with these conf & vars
+    Connection con1 = DriverManager.getConnection(jdbcUri);
+
+    // Execute "set" command and retrieve values for the conf & vars specified above
+    // Assert values retrieved
+    Statement stmt = con1.createStatement();
+
+    // Verify that the property has been properly set while creating the connection above
+    verifyConfProperty(stmt, "hive.cli.print.header", "true");
+    verifyConfProperty(stmt, "hive.server2.async.exec.shutdown.timeout", "20");
+    verifyConfProperty(stmt, "hive.server2.async.exec.threads", "30");
+    verifyConfProperty(stmt, "hive.server2.thrift.http.max.worker.threads", "15");
+    verifyConfProperty(stmt, "stab", "salesTable");
+    verifyConfProperty(stmt, "icol", "customerID");
+    con1.close();
+
+    if(hiveServer2 != null) {
+      hiveServer2.stop();
+    }
+  }
+
+  private void verifyConfProperty(Statement stmt, String property, String expectedValue)
+      throws Exception {
+    ResultSet res = stmt.executeQuery("set " + property);
+    while(res.next()) {
+      String resultValues[] = res.getString(1).split("=");
+      assertEquals(resultValues[1], expectedValue);
+    }
+  }
+
   @Test
   public void testDataTypes2() throws Exception {
     Statement stmt = con.createStatement();
@@ -1504,27 +1557,12 @@ public class TestJdbcDriver2 {
     assertEquals(Integer.MAX_VALUE, meta.getPrecision(14));
     assertEquals(0, meta.getScale(14));
 
-    // Move the result of getColumns() forward to match the columns of the query
-    assertTrue(colRS.next());  // c13
-    assertTrue(colRS.next());  // c14
-    assertTrue(colRS.next());  // c15
-    assertTrue(colRS.next());  // c16
-    assertTrue(colRS.next());  // c17
-
     assertEquals("c17", meta.getColumnName(15));
     assertEquals(Types.TIMESTAMP, meta.getColumnType(15));
     assertEquals("timestamp", meta.getColumnTypeName(15));
     assertEquals(29, meta.getColumnDisplaySize(15));
     assertEquals(29, meta.getPrecision(15));
     assertEquals(9, meta.getScale(15));
-
-    assertEquals("c17", colRS.getString("COLUMN_NAME"));
-    assertEquals(Types.TIMESTAMP, colRS.getInt("DATA_TYPE"));
-    assertEquals("timestamp", colRS.getString("TYPE_NAME").toLowerCase());
-    assertEquals(meta.getPrecision(15), colRS.getInt("COLUMN_SIZE"));
-    assertEquals(meta.getScale(15), colRS.getInt("DECIMAL_DIGITS"));
-
-    assertTrue(colRS.next());
 
     assertEquals("c18", meta.getColumnName(16));
     assertEquals(Types.DECIMAL, meta.getColumnType(16));
@@ -1533,29 +1571,12 @@ public class TestJdbcDriver2 {
     assertEquals(16, meta.getPrecision(16));
     assertEquals(7, meta.getScale(16));
 
-    assertEquals("c18", colRS.getString("COLUMN_NAME"));
-    assertEquals(Types.DECIMAL, colRS.getInt("DATA_TYPE"));
-    assertEquals("decimal", colRS.getString("TYPE_NAME").toLowerCase());
-    assertEquals(meta.getPrecision(16), colRS.getInt("COLUMN_SIZE"));
-    assertEquals(meta.getScale(16), colRS.getInt("DECIMAL_DIGITS"));
-
-    assertTrue(colRS.next());  // skip c19, since not selected by query
-    assertTrue(colRS.next());
-
     assertEquals("c20", meta.getColumnName(17));
     assertEquals(Types.DATE, meta.getColumnType(17));
     assertEquals("date", meta.getColumnTypeName(17));
     assertEquals(10, meta.getColumnDisplaySize(17));
     assertEquals(10, meta.getPrecision(17));
     assertEquals(0, meta.getScale(17));
-
-    assertEquals("c20", colRS.getString("COLUMN_NAME"));
-    assertEquals(Types.DATE, colRS.getInt("DATA_TYPE"));
-    assertEquals("date", colRS.getString("TYPE_NAME").toLowerCase());
-    assertEquals(meta.getPrecision(17), colRS.getInt("COLUMN_SIZE"));
-    assertEquals(meta.getScale(17), colRS.getInt("DECIMAL_DIGITS"));
-
-    assertTrue(colRS.next());
 
     assertEquals("c21", meta.getColumnName(18));
     assertEquals(Types.VARCHAR, meta.getColumnType(18));
@@ -1564,14 +1585,6 @@ public class TestJdbcDriver2 {
     assertEquals(20, meta.getColumnDisplaySize(18));
     assertEquals(20, meta.getPrecision(18));
     assertEquals(0, meta.getScale(18));
-
-    assertEquals("c21", colRS.getString("COLUMN_NAME"));
-    assertEquals(Types.VARCHAR, colRS.getInt("DATA_TYPE"));
-    assertEquals("varchar", colRS.getString("TYPE_NAME").toLowerCase());
-    assertEquals(meta.getPrecision(18), colRS.getInt("COLUMN_SIZE"));
-    assertEquals(meta.getScale(18), colRS.getInt("DECIMAL_DIGITS"));
-
-    assertTrue(colRS.next());
 
     assertEquals("c22", meta.getColumnName(19));
     assertEquals(Types.CHAR, meta.getColumnType(19));
@@ -1587,12 +1600,6 @@ public class TestJdbcDriver2 {
     assertEquals(Integer.MAX_VALUE, meta.getColumnDisplaySize(20));
     assertEquals(Integer.MAX_VALUE, meta.getPrecision(20));
     assertEquals(0, meta.getScale(20));
-
-    assertEquals("c22", colRS.getString("COLUMN_NAME"));
-    assertEquals(Types.CHAR, colRS.getInt("DATA_TYPE"));
-    assertEquals("char", colRS.getString("TYPE_NAME").toLowerCase());
-    assertEquals(meta.getPrecision(19), colRS.getInt("COLUMN_SIZE"));
-    assertEquals(meta.getScale(19), colRS.getInt("DECIMAL_DIGITS"));
 
     for (int i = 1; i <= meta.getColumnCount(); i++) {
       assertFalse(meta.isAutoIncrement(i));

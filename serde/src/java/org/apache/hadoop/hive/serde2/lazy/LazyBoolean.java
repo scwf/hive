@@ -63,23 +63,8 @@ public class LazyBoolean extends
       data.set(false);
       isNull = false;
     } else {
-      if (oi.isExtendedLiteral()) {
-        if (length == 1) {
-          byte c = bytes.getData()[start];
-          if (c == '1' || c == 't' || c == 'T') {
-            data.set(true);
-            isNull = false;
-          } else if (c == '0' || c == 'f' || c == 'F') {
-            data.set(false);
-            isNull = false;
-          } else {
-            isNull = true;
-          }
-        }
-      } else {
-        isNull = true;
-        logExceptionMessage(bytes, start, length, "BOOLEAN");
-      }
+      isNull = true;
+      logExceptionMessage(bytes, start, length, "BOOLEAN");
     }
   }
 

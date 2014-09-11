@@ -35,7 +35,6 @@ import org.apache.hadoop.hive.ql.io.RCFileOutputFormat;
 import org.apache.hadoop.hive.ql.metadata.HiveException;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.columnar.BytesRefArrayWritable;
 import org.apache.hadoop.hive.serde2.columnar.BytesRefWritable;
 import org.apache.hadoop.hive.serde2.columnar.ColumnarSerDe;
@@ -97,7 +96,7 @@ public class TestVectorizedRowBatchCtx {
 
     try {
       serDe = new ColumnarSerDe();
-      SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+      serDe.initialize(conf, tbl);
     } catch (SerDeException e) {
       new RuntimeException(e);
     }
@@ -335,7 +334,7 @@ public class TestVectorizedRowBatchCtx {
 
     // Test VectorizedColumnarSerDe
     VectorizedColumnarSerDe vcs = new VectorizedColumnarSerDe();
-    SerDeUtils.initializeSerDe(vcs, this.conf, tbl, null);
+    vcs.initialize(this.conf, tbl);
     Writable w = vcs.serializeVector(batch, (StructObjectInspector) serDe
         .getObjectInspector());
     BytesRefArrayWritable[] refArray = (BytesRefArrayWritable[]) ((ObjectWritable) w).get();

@@ -350,7 +350,7 @@ public class HiveConf extends Configuration {
     METASTORE_AUTHORIZATION_STORAGE_AUTH_CHECKS("hive.metastore.authorization.storage.checks", false),
     METASTORE_EVENT_CLEAN_FREQ("hive.metastore.event.clean.freq",0L),
     METASTORE_EVENT_EXPIRY_DURATION("hive.metastore.event.expiry.duration",0L),
-    METASTORE_EXECUTE_SET_UGI("hive.metastore.execute.setugi", true),
+    METASTORE_EXECUTE_SET_UGI("hive.metastore.execute.setugi", false),
     METASTORE_PARTITION_NAME_WHITELIST_PATTERN(
         "hive.metastore.partition.name.whitelist.pattern", ""),
     // Whether to enable integral JDO pushdown. For partition columns storing integers
@@ -556,9 +556,6 @@ public class HiveConf extends Configuration {
     HIVE_ORC_SKIP_CORRUPT_DATA("hive.exec.orc.skip.corrupt.data", false),
 
     HIVE_ORC_ZEROCOPY("hive.exec.orc.zerocopy", false),
-
-    // Whether extended literal set is allowed for LazySimpleSerde.
-    HIVE_LAZYSIMPLE_EXTENDED_BOOLEAN_LITERAL("hive.lazysimple.extended_boolean_literal", false),
 
     HIVESKEWJOIN("hive.optimize.skewjoin", false),
     HIVECONVERTJOIN("hive.auto.convert.join", true),
@@ -858,7 +855,6 @@ public class HiveConf extends Configuration {
     HIVE_START_CLEANUP_SCRATCHDIR("hive.start.cleanup.scratchdir", false),
     HIVE_INSERT_INTO_MULTILEVEL_DIRS("hive.insert.into.multilevel.dirs", false),
     HIVE_WAREHOUSE_SUBDIR_INHERIT_PERMS("hive.warehouse.subdir.inherit.perms", false),
-    HIVE_WAREHOUSE_DATA_SKIPTRASH("hive.warehouse.data.skipTrash", false),
     // whether insert into external tables is allowed
     HIVE_INSERT_INTO_EXTERNAL_TABLES("hive.insert.into.external.tables", true),
 
@@ -884,9 +880,6 @@ public class HiveConf extends Configuration {
     // binary transport settings
     HIVE_SERVER2_THRIFT_PORT("hive.server2.thrift.port", 10000),
     HIVE_SERVER2_THRIFT_BIND_HOST("hive.server2.thrift.bind.host", ""),
-    // hadoop.rpc.protection being set to a higher level than HiveServer2
-    // does not make sense in most situations.
-    // HiveServer2 ignores hadoop.rpc.protection in favor of hive.server2.thrift.sasl.qop.
     HIVE_SERVER2_THRIFT_SASL_QOP("hive.server2.thrift.sasl.qop", "auth",
         new StringsValidator("auth", "auth-int", "auth-conf")),
     HIVE_SERVER2_THRIFT_MIN_WORKER_THREADS("hive.server2.thrift.min.worker.threads", 5),

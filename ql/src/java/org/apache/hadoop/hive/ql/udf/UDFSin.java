@@ -19,31 +19,38 @@
 package org.apache.hadoop.hive.ql.udf;
 
 import org.apache.hadoop.hive.ql.exec.Description;
+import org.apache.hadoop.hive.ql.exec.UDF;
 import org.apache.hadoop.hive.ql.exec.vector.VectorizedExpressions;
 import org.apache.hadoop.hive.ql.exec.vector.expressions.gen.FuncSinDoubleToDouble;
 import org.apache.hadoop.hive.ql.exec.vector.expressions.gen.FuncSinLongToDouble;
 import org.apache.hadoop.hive.serde2.io.DoubleWritable;
+import org.apache.hadoop.hive.serde2.io.HiveDecimalWritable;
 
 /**
  * UDFSin.
+ *
  */
 @Description(name = "sin",
-             value = "_FUNC_(x) - returns the sine of x (x is in radians)",
-             extended = "Example:\n "
-                        + "  > SELECT _FUNC_(0) FROM src LIMIT 1;\n"
-                        + "  0")
+    value = "_FUNC_(x) - returns the sine of x (x is in radians)",
+    extended = "Example:\n "
+    + "  > SELECT _FUNC_(0) FROM src LIMIT 1;\n" + "  0")
 @VectorizedExpressions({FuncSinLongToDouble.class, FuncSinDoubleToDouble.class})
 public class UDFSin extends UDFMath {
-
   private final DoubleWritable result = new DoubleWritable();
+
+  public UDFSin() {
+  }
 
   /**
    * Take Sine of a.
    */
-  @Override
-  protected DoubleWritable doEvaluate(DoubleWritable a) {
-    result.set(Math.sin(a.get()));
-    return result;
+  public DoubleWritable evaluate(DoubleWritable a) {
+    if (a == null) {
+      return null;
+    } else {
+      result.set(Math.sin(a.get()));
+      return result;
+    }
   }
 
 }

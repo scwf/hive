@@ -99,7 +99,7 @@ public class ThriftHttpCLIService extends ThriftCLIService {
       connector.setReuseAddress(!Shell.WINDOWS);
       httpServer.addConnector(connector);
 
-      hiveAuthFactory = new HiveAuthFactory(hiveConf);
+      hiveAuthFactory = new HiveAuthFactory();
       TProcessorFactory processorFactory = hiveAuthFactory.getAuthProcFactory(this);
       TProcessor processor = processorFactory.getProcessor(null);
 

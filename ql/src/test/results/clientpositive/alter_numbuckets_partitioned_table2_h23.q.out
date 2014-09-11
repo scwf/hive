@@ -15,10 +15,8 @@ POSTHOOK: Output: database:default
 POSTHOOK: Output: default@tst1
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 # col_name            	data_type           	comment             
 	 	 
 key                 	string              	                    
@@ -61,10 +59,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 # col_name            	data_type           	comment             
@@ -116,10 +112,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 # col_name            	data_type           	comment             
@@ -166,10 +160,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -225,10 +217,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -279,10 +269,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -342,10 +330,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -400,10 +386,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -467,10 +451,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -529,10 +511,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -600,10 +580,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -666,10 +644,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -741,10 +717,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -811,10 +785,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -890,10 +862,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -964,10 +934,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -1047,10 +1015,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
@@ -1125,10 +1091,8 @@ POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:ke
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 PREHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 PREHOOK: type: DESCTABLE
-PREHOOK: Input: default@tst1
 POSTHOOK: query: DESCRIBE FORMATTED tst1 PARTITION (ds = '1')
 POSTHOOK: type: DESCTABLE
-POSTHOOK: Input: default@tst1
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).value SIMPLE [(src)src.FieldSchema(name:value, type:string, comment:default), ]
 POSTHOOK: Lineage: tst1 PARTITION(ds=1).key SIMPLE [(src)src.FieldSchema(name:key, type:string, comment:default), ]

@@ -20,7 +20,6 @@ package org.apache.hadoop.hive.serde2.avro;
 import org.apache.avro.Schema;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardStructObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.StructField;
@@ -77,7 +76,7 @@ public class TestAvroSerde {
 
 
     AvroSerDe asd = new AvroSerDe();
-    SerDeUtils.initializeSerDe(asd, conf, props, null);
+    asd.initialize(conf, props);
 
     // Verify that the schema now within the configuration is the one passed
     // in via the properties
@@ -134,7 +133,7 @@ public class TestAvroSerde {
 
   private void verifyErrorSchemaReturned(Properties props) throws SerDeException {
     AvroSerDe asd = new AvroSerDe();
-    SerDeUtils.initializeSerDe(asd, new Configuration(), props, null);
+    asd.initialize(new Configuration(), props);
     assertTrue(asd.getObjectInspector() instanceof StandardStructObjectInspector);
     StandardStructObjectInspector oi = (StandardStructObjectInspector)asd.getObjectInspector();
     List<? extends StructField> allStructFieldRefs = oi.getAllStructFieldRefs();

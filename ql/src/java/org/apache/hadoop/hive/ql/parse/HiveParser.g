@@ -226,7 +226,6 @@ TOK_ALTERVIEW_DROPPARTS;
 TOK_ALTERVIEW_RENAME;
 TOK_VIEWPARTCOLS;
 TOK_EXPLAIN;
-TOK_EXPLAIN_SQ_REWRITE;
 TOK_TABLESERIALIZER;
 TOK_TABLEPROPERTIES;
 TOK_TABLEPROPLIST;
@@ -468,8 +467,6 @@ import java.util.HashMap;
     xlateMap.put("KW_VALUE_TYPE", "\$VALUE\$");
     xlateMap.put("KW_ELEM_TYPE", "\$ELEM\$");
     xlateMap.put("KW_DEFINED", "DEFINED");
-    xlateMap.put("KW_SUBQUERY", "SUBQUERY");
-    xlateMap.put("KW_REWRITE", "REWRITE");
 
     // Operators
     xlateMap.put("DOT", ".");
@@ -619,11 +616,8 @@ statement
 explainStatement
 @init { pushMsg("explain statement", state); }
 @after { popMsg(state); }
-	: KW_EXPLAIN 
-	  ( (explainOptions=KW_EXTENDED|explainOptions=KW_FORMATTED|explainOptions=KW_DEPENDENCY|explainOptions=KW_LOGICAL)? execStatement
-          -> ^(TOK_EXPLAIN execStatement $explainOptions?) |
-      KW_REWRITE queryStatementExpression[true] -> ^(TOK_EXPLAIN_SQ_REWRITE queryStatementExpression)
-    )
+	: KW_EXPLAIN (explainOptions=KW_EXTENDED|explainOptions=KW_FORMATTED|explainOptions=KW_DEPENDENCY|explainOptions=KW_LOGICAL)? execStatement
+      -> ^(TOK_EXPLAIN execStatement $explainOptions?)
 	;
 
 execStatement

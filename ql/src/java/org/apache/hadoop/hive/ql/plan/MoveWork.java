@@ -38,7 +38,6 @@ public class MoveWork implements Serializable {
   private LoadMultiFilesDesc loadMultiFilesWork;
 
   private boolean checkFileFormat;
-  private boolean srcLocal;
 
   /**
    * ReadEntitites that are passed to the hooks.
@@ -60,16 +59,6 @@ public class MoveWork implements Serializable {
   public MoveWork(HashSet<ReadEntity> inputs, HashSet<WriteEntity> outputs) {
     this.inputs = inputs;
     this.outputs = outputs;
-  }
-
-  public MoveWork(HashSet<ReadEntity> inputs, HashSet<WriteEntity> outputs,
-      final LoadTableDesc loadTableWork, final LoadFileDesc loadFileWork,
-      boolean checkFileFormat, boolean srcLocal) {
-    this(inputs, outputs);
-    this.loadTableWork = loadTableWork;
-    this.loadFileWork = loadFileWork;
-    this.checkFileFormat = checkFileFormat;
-    this.srcLocal = srcLocal;
   }
 
   public MoveWork(HashSet<ReadEntity> inputs, HashSet<WriteEntity> outputs,
@@ -130,14 +119,6 @@ public class MoveWork implements Serializable {
 
   public void setOutputs(HashSet<WriteEntity> outputs) {
     this.outputs = outputs;
-  }
-
-  public boolean isSrcLocal() {
-    return srcLocal;
-  }
-
-  public void setSrcLocal(boolean srcLocal) {
-    this.srcLocal = srcLocal;
   }
 
 }

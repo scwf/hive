@@ -72,7 +72,7 @@ public class TestBinarySortableSerDe extends TestCase {
     schema.setProperty(serdeConstants.SERIALIZATION_SORT_ORDER, order);
 
     BinarySortableSerDe serde = new BinarySortableSerDe();
-    SerDeUtils.initializeSerDe(serde, new Configuration(), schema, null);
+    serde.initialize(new Configuration(), schema);
     return serde;
   }
 

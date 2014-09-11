@@ -85,7 +85,6 @@ import org.apache.hadoop.hive.ql.udf.ptf.TableFunctionResolver;
 import org.apache.hadoop.hive.ql.udf.ptf.WindowingTableFunction.WindowingTableFunctionResolver;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.lazybinary.LazyBinarySerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -137,7 +136,6 @@ public class PTFTranslator {
     ptfDesc.setCfg(hCfg);
     ptfDesc.setLlInfo(llInfo);
     translatePTFChain();
-    PTFDeserializer.alterOutputOIForStreaming(ptfDesc);
     return ptfDesc;
   }
 
@@ -222,8 +220,6 @@ public class PTFTranslator {
     wdwTFnDef.setOutputShape(wdwOutShape);
 
     tFn.setupOutputOI();
-
-    PTFDeserializer.alterOutputOIForStreaming(ptfDesc);
 
     return ptfDesc;
   }
@@ -818,7 +814,7 @@ public class PTFTranslator {
     p.setProperty(
         org.apache.hadoop.hive.serde.serdeConstants.LIST_COLUMN_TYPES,
         serdePropsMap.get(org.apache.hadoop.hive.serde.serdeConstants.LIST_COLUMN_TYPES));
-    SerDeUtils.initializeSerDe(serDe, cfg, p, null);
+    serDe.initialize(cfg, p);
     return serDe;
   }
 

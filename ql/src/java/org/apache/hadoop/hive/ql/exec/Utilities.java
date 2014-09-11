@@ -157,7 +157,6 @@ import org.apache.hadoop.hive.ql.stats.StatsFactory;
 import org.apache.hadoop.hive.ql.stats.StatsPublisher;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.Serializer;
 import org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe;
 import org.apache.hadoop.hive.shims.ShimLoader;
@@ -2228,10 +2227,8 @@ public final class Utilities {
                   return;
                 }
                 HiveStorageHandler handler = HiveUtils.getStorageHandler(myConf,
-                    SerDeUtils.createOverlayedProperties(
-                        partDesc.getTableDesc().getProperties(),
-                        partDesc.getProperties())
-                        .getProperty(hive_metastoreConstants.META_TABLE_STORAGE));
+                    partDesc.getOverlayedProperties().getProperty(
+                    hive_metastoreConstants.META_TABLE_STORAGE));
                 if (handler instanceof InputEstimator) {
                   long total = 0;
                   TableDesc tableDesc = partDesc.getTableDesc();
@@ -3399,9 +3396,24 @@ public final class Utilities {
     return createDirsWithPermission(conf, mkdir, fsPermission, recursive);
   }
 
-  public static boolean createDirsWithPermission(Configuration conf, Path mkdir,
+  private static void resetConfAndCloseFS (Configuration conf, boolean unsetUmask, 
+      String origUmask, FileSystem fs) throws IOException {
+    if (unsetUmask) {
+      if (origUmask != null) {
+        conf.set("fs.permissions.umask-mode", origUmask);
+      } else {
+        conf.unset("fs.permissions.umask-mode");
+      }
+    }
+
+    fs.close();
+  }
+
+  public static boolean createDirsWithPermission(Configuration conf, Path mkdirPath,
       FsPermission fsPermission, boolean recursive) throws IOException {
     String origUmask = null;
+    LOG.debug("Create dirs " + mkdirPath + " with permission " + fsPermission + " recursive " +
+        recursive);
 
     if (recursive) {
       origUmask = conf.get("fs.permissions.umask-mode");
@@ -3409,15 +3421,17 @@ public final class Utilities {
       // all parents getting the fsPermission & !(022) permission instead of fsPermission
       conf.set("fs.permissions.umask-mode", "000");
     }
-
-    FileSystem fs = mkdir.getFileSystem(conf);
-    boolean retval = fs.mkdirs(mkdir, fsPermission);
-
-    if (recursive) {
-      if (origUmask != null) {
-        conf.set("fs.permissions.umask-mode", origUmask);
-      } else {
-        conf.unset("fs.permissions.umask-mode");
+    FileSystem fs = ShimLoader.getHadoopShims().getNonCachedFileSystem(mkdirPath.toUri(), conf);
+    boolean retval = false;
+    try {
+      retval = fs.mkdirs(mkdirPath, fsPermission);
+      resetConfAndCloseFS(conf, recursive, origUmask, fs);
+    } catch (IOException ioe) {
+      try {
+        resetConfAndCloseFS(conf, recursive, origUmask, fs);
+      }
+      catch (IOException e) {
+        // do nothing - double failure
       }
     }
     return retval;

@@ -28,7 +28,6 @@ import org.apache.hadoop.hive.ql.metadata.Table;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.MapObjectInspector;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -143,17 +142,14 @@ class InternalUtil {
   // if the default was decided by the serde
   static void initializeOutputSerDe(SerDe serDe, Configuration conf, OutputJobInfo jobInfo)
     throws SerDeException {
-    SerDeUtils.initializeSerDe(serDe, conf,
-                               getSerdeProperties(jobInfo.getTableInfo(),
-                                                  jobInfo.getOutputSchema()),
-                               null);
+    serDe.initialize(conf, getSerdeProperties(jobInfo.getTableInfo(), jobInfo.getOutputSchema()));
   }
 
   static void initializeDeserializer(Deserializer deserializer, Configuration conf,
                      HCatTableInfo info, HCatSchema schema) throws SerDeException {
     Properties props = getSerdeProperties(info, schema);
     LOG.info("Initializing " + deserializer.getClass().getName() + " with properties " + props);
-    SerDeUtils.initializeSerDe(deserializer, conf, props, null);
+    deserializer.initialize(conf, props);
   }
 
   private static Properties getSerdeProperties(HCatTableInfo info, HCatSchema s)

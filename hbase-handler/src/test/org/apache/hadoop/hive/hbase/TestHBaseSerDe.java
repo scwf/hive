@@ -115,28 +115,28 @@ public class TestHBaseSerDe extends TestCase {
     HBaseSerDe serDe = new HBaseSerDe();
     Configuration conf = new Configuration();
     Properties tbl = createPropertiesI_I();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerialize(serDe, r, p, expectedFieldsData);
 
     serDe = new HBaseSerDe();
     conf = new Configuration();
     tbl = createPropertiesI_II();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerialize(serDe, r, p, expectedFieldsData);
 
     serDe = new HBaseSerDe();
     conf = new Configuration();
     tbl = createPropertiesI_III();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerialize(serDe, r, p, expectedFieldsData);
 
     serDe = new HBaseSerDe();
     conf = new Configuration();
     tbl = createPropertiesI_IV();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerialize(serDe, r, p, expectedFieldsData);
   }
@@ -149,7 +149,7 @@ public class TestHBaseSerDe extends TestCase {
     long putTimestamp = 1;
     tbl.setProperty(HBaseSerDe.HBASE_PUT_TIMESTAMP,
             Long.toString(putTimestamp));
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
 
     byte [] cfa = "cola".getBytes();
@@ -356,21 +356,21 @@ public class TestHBaseSerDe extends TestCase {
     HBaseSerDe serDe = new HBaseSerDe();
     Configuration conf = new Configuration();
     Properties tbl = createPropertiesII_I();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerialize(serDe, r, p, expectedFieldsData);
 
     serDe = new HBaseSerDe();
     conf = new Configuration();
     tbl = createPropertiesII_II();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerialize(serDe, r, p, expectedFieldsData);
 
     serDe = new HBaseSerDe();
     conf = new Configuration();
     tbl = createPropertiesII_III();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerialize(serDe, r, p, expectedFieldsData);
   }
@@ -486,7 +486,7 @@ public class TestHBaseSerDe extends TestCase {
     HBaseSerDe hbaseSerDe = new HBaseSerDe();
     Configuration conf = new Configuration();
     Properties tbl = createPropertiesForHiveMapHBaseColumnFamily();
-    SerDeUtils.initializeSerDe(hbaseSerDe, conf, tbl, null);
+    hbaseSerDe.initialize(conf, tbl);
 
     deserializeAndSerializeHiveMapHBaseColumnFamily(hbaseSerDe, r, p, expectedData, rowKeys,
         columnFamilies, columnQualifiersAndValues);
@@ -494,7 +494,7 @@ public class TestHBaseSerDe extends TestCase {
     hbaseSerDe = new HBaseSerDe();
     conf = new Configuration();
     tbl = createPropertiesForHiveMapHBaseColumnFamilyII();
-    SerDeUtils.initializeSerDe(hbaseSerDe, conf, tbl, null);
+    hbaseSerDe.initialize(conf, tbl);
 
     deserializeAndSerializeHiveMapHBaseColumnFamily(hbaseSerDe, r, p, expectedData, rowKeys,
         columnFamilies, columnQualifiersAndValues);
@@ -615,7 +615,7 @@ public class TestHBaseSerDe extends TestCase {
     HBaseSerDe hbaseSerDe = new HBaseSerDe();
     Configuration conf = new Configuration();
     Properties tbl = createPropertiesForHiveMapHBaseColumnFamilyII_I();
-    SerDeUtils.initializeSerDe(hbaseSerDe, conf, tbl, null);
+    hbaseSerDe.initialize(conf, tbl);
 
     deserializeAndSerializeHiveMapHBaseColumnFamilyII(hbaseSerDe, r, p, expectedData,
         columnFamilies, columnQualifiersAndValues);
@@ -623,7 +623,7 @@ public class TestHBaseSerDe extends TestCase {
     hbaseSerDe = new HBaseSerDe();
     conf = new Configuration();
     tbl = createPropertiesForHiveMapHBaseColumnFamilyII_II();
-    SerDeUtils.initializeSerDe(hbaseSerDe, conf, tbl, null);
+    hbaseSerDe.initialize(conf, tbl);
 
     deserializeAndSerializeHiveMapHBaseColumnFamilyII(hbaseSerDe, r, p, expectedData,
         columnFamilies, columnQualifiersAndValues);
@@ -748,7 +748,7 @@ public class TestHBaseSerDe extends TestCase {
     HBaseSerDe serDe = new HBaseSerDe();
     Configuration conf = new Configuration();
     Properties tbl = createPropertiesForColumnPrefixes();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     Object notPresentKey = new Text("unwanted_col");
 
@@ -842,7 +842,7 @@ public class TestHBaseSerDe extends TestCase {
     HBaseSerDe serDe = new HBaseSerDe();
     Configuration conf = new Configuration();
     Properties tbl = createPropertiesForCompositeKeyWithSeparator();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerializeHBaseCompositeKey(serDe, r, p);
   }
@@ -892,7 +892,7 @@ public class TestHBaseSerDe extends TestCase {
     HBaseSerDe serDe = new HBaseSerDe();
     Configuration conf = new Configuration();
     Properties tbl = createPropertiesForCompositeKeyWithoutSeparator();
-    SerDeUtils.initializeSerDe(serDe, conf, tbl, null);
+    serDe.initialize(conf, tbl);
 
     deserializeAndSerializeHBaseCompositeKey(serDe, r, p);
   }

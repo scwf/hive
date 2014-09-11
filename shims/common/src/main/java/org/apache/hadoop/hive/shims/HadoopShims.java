@@ -27,7 +27,6 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.security.PrivilegedExceptionAction;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -89,9 +88,6 @@ public interface HadoopShims {
    */
   public MiniMrShim getMiniMrCluster(Configuration conf, int numberOfTaskTrackers,
       String nameNode, int numDir) throws IOException;
-
-  public MiniMrShim getMiniTezCluster(Configuration conf, int numberOfTaskTrackers,
-                                     String nameNode, int numDir) throws IOException;
 
   /**
    * Shim for MiniMrCluster
@@ -484,7 +480,7 @@ public interface HadoopShims {
   public HCatHadoopShims getHCatShim();
   public interface HCatHadoopShims {
 
-    enum PropertyName {CACHE_ARCHIVES, CACHE_FILES, CACHE_SYMLINK, CLASSPATH_ARCHIVES, CLASSPATH_FILES}
+    enum PropertyName {CACHE_ARCHIVES, CACHE_FILES, CACHE_SYMLINK}
 
     public TaskID createTaskID();
 
@@ -631,4 +627,7 @@ public interface HadoopShims {
    * Get configuration from JobContext
    */
   public Configuration getConfiguration(JobContext context);
+
+  public FileSystem getNonCachedFileSystem(URI uri, Configuration conf) throws IOException;
+
 }

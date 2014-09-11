@@ -28,4 +28,9 @@ public class TestOrcHCatPigStorer extends TestHCatStorer {
   @Override String getStorageFormat() {
     return "ORC";
   }
+  @Ignore("BUG-15650")
+  @Test
+  @Override public void testStoreFuncAllSimpleTypes() throws IOException, CommandNeedRetryException {
+    super.testStoreFuncAllSimpleTypes();
+  }
 }

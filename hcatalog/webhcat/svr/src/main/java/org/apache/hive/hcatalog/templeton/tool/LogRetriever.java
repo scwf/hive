@@ -127,7 +127,6 @@ public class LogRetriever {
     case HIVE:
       jobIDParser = new HiveJobIDParser(statusDir, conf);
       break;
-    case SQOOP:
     case JAR:
     case STREAMING:
       jobIDParser = new JarJobIDParser(statusDir, conf);
@@ -135,7 +134,7 @@ public class LogRetriever {
     default:
       System.err
         .println("Unknown job type:" + jobType!=null? jobType.toString():"null"
-        + ", only pig/hive/jar/streaming/sqoop are supported, skip logs");
+        + ", only pig/hive/jar/streaming are supported, skip logs");
       return;
     }
     List<String> jobs = new ArrayList<String>();

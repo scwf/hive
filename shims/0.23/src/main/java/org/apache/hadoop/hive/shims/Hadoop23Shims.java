@@ -17,20 +17,17 @@
  */
 package org.apache.hadoop.hive.shims;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.Integer;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.net.URI;
-import java.nio.ByteBuffer;
-import java.io.FileNotFoundException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -46,17 +43,13 @@ import org.apache.hadoop.fs.ProxyFileSystem;
 import org.apache.hadoop.fs.RemoteIterator;
 import org.apache.hadoop.fs.Trash;
 import org.apache.hadoop.hdfs.MiniDFSCluster;
-import org.apache.hadoop.hive.shims.HadoopShims.ByteBufferPoolShim;
-import org.apache.hadoop.hive.shims.HadoopShims.DirectCompressionType;
-import org.apache.hadoop.hive.shims.HadoopShims.DirectDecompressorShim;
-import org.apache.hadoop.hive.shims.HadoopShims.ZeroCopyReaderShim;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.mapred.ClusterStatus;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.MiniMRCluster;
 import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.WebHCatJTShim23;
+import org.apache.hadoop.mapred.lib.TotalOrderPartitioner;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.JobID;
@@ -69,9 +62,8 @@ import org.apache.hadoop.mapreduce.task.JobContextImpl;
 import org.apache.hadoop.mapreduce.task.TaskAttemptContextImpl;
 import org.apache.hadoop.mapreduce.util.HostUtil;
 import org.apache.hadoop.net.NetUtils;
-import org.apache.hadoop.util.Progressable;
-import org.apache.hadoop.mapred.lib.TotalOrderPartitioner;
 import org.apache.hadoop.security.UserGroupInformation;
+import org.apache.hadoop.util.Progressable;
 import org.apache.tez.test.MiniTezCluster;
 
 /**
@@ -104,9 +96,11 @@ public class Hadoop23Shims extends HadoopShimsSecure {
       LOG.warn("Can't fetch tasklog: TaskLogServlet is not supported in MR2 mode.");
       return null;
     } else {
-      // Was using Hadoop-internal API to get tasklogs, disable until  MAPREDUCE-5857 is fixed.
-      LOG.warn("Can't fetch tasklog: TaskLogServlet is not supported in MR1 mode.");
-      return null;
+      // if the cluster is running in MR1 mode, using HostUtil to construct TaskLogURL
+      URL taskTrackerHttpURL = new URL(taskTrackerHttpAddress);
+      return HostUtil.getTaskLogUrl(taskTrackerHttpURL.getHost(),
+        Integer.toString(taskTrackerHttpURL.getPort()),
+        taskAttemptId);
     }
   }
 
@@ -448,10 +442,6 @@ public class Hadoop23Shims extends HadoopShimsSecure {
           return MRJobConfig.CACHE_FILES;
         case CACHE_SYMLINK:
           return MRJobConfig.CACHE_SYMLINK;
-        case CLASSPATH_ARCHIVES:
-          return MRJobConfig.CLASSPATH_ARCHIVES;
-        case CLASSPATH_FILES:
-          return MRJobConfig.CLASSPATH_FILES;
       }
 
       return "";
@@ -577,5 +567,10 @@ public class Hadoop23Shims extends HadoopShimsSecure {
   @Override
   public Configuration getConfiguration(org.apache.hadoop.mapreduce.JobContext context) {
     return context.getConfiguration();
+  }
+
+  @Override
+  public FileSystem getNonCachedFileSystem(URI uri, Configuration conf) throws IOException {
+    return FileSystem.newInstance(uri, conf);
   }
 }

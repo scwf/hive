@@ -137,10 +137,8 @@ public class GenericUDAFMkCollectionEvaluator extends GenericUDAFEvaluator
       throws HiveException {
     MkArrayAggregationBuffer myagg = (MkArrayAggregationBuffer) agg;
     List<Object> partialResult = (ArrayList<Object>) internalMergeOI.getList(partial);
-    if (partialResult != null) {
-      for(Object i : partialResult) {
-        putIntoCollection(i, myagg);
-      }
+    for(Object i : partialResult) {
+      putIntoCollection(i, myagg);
     }
   }
 

@@ -146,7 +146,6 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import org.apache.hadoop.hive.serde2.typeinfo.VarcharTypeInfo;
 import org.apache.hadoop.mapred.InputFormat;
 import org.apache.hadoop.mapred.TextInputFormat;
-import org.apache.hadoop.util.StringUtils;
 
 import com.google.common.collect.Lists;
 
@@ -589,14 +588,13 @@ public class DDLSemanticAnalyzer extends BaseSemanticAnalyzer {
     }
   }
 
-  private void analyzeShowRoles(ASTNode ast) throws SemanticException {
-    Task<DDLWork> roleDDLTask = (Task<DDLWork>) hiveAuthorizationTaskFactory
-        .createShowRolesTask(ast, ctx.getResFile(), getInputs(), getOutputs());
-
-    if (roleDDLTask != null) {
-      rootTasks.add(roleDDLTask);
-      setFetchTask(createFetchTask(RoleDDLDesc.getRoleNameSchema()));
-    }
+  private void analyzeShowRoles(ASTNode ast) {
+    RoleDDLDesc showRolesDesc = new RoleDDLDesc(null, null,
+        RoleDDLDesc.RoleOperation.SHOW_ROLES, null);
+    showRolesDesc.setResFile(ctx.getResFile().toString());
+    rootTasks.add(TaskFactory.get(new DDLWork(getInputs(), getOutputs(),
+        showRolesDesc), conf));
+    setFetchTask(createFetchTask(RoleDDLDesc.getRoleNameSchema()));
   }
 
   private void analyzeAlterDatabaseProperties(ASTNode ast) throws SemanticException {
@@ -3044,9 +3042,7 @@ public class DDLSemanticAnalyzer extends BaseSemanticAnalyzer {
         try {
           parts = db.getPartitions(tab, partSpec);
         } catch (HiveException e) {
-          LOG.error("Got HiveException during obtaining list of partitions"
-              + StringUtils.stringifyException(e));
-          throw new SemanticException(e.getMessage(), e);
+          LOG.error("Got HiveException during obtaining list of partitions");
         }
       } else {
         parts = new ArrayList<Partition>();
@@ -3056,8 +3052,7 @@ public class DDLSemanticAnalyzer extends BaseSemanticAnalyzer {
             parts.add(p);
           }
         } catch (HiveException e) {
-          LOG.debug("Wrong specification" + StringUtils.stringifyException(e));
-          throw new SemanticException(e.getMessage(), e);
+          LOG.debug("Wrong specification");
         }
       }
       if (parts.isEmpty()) {

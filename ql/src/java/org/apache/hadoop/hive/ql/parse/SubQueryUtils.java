@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.antlr.runtime.tree.CommonTreeAdaptor;
 import org.apache.hadoop.hive.ql.Context;
 import org.apache.hadoop.hive.ql.ErrorMsg;
 import org.apache.hadoop.hive.ql.exec.ColumnInfo;
@@ -631,12 +630,6 @@ public class SubQueryUtils {
     public String getOuterQueryId();
   };
 
-    
-  /*
-   * Using CommonTreeAdaptor because the Adaptor in ParseDriver doesn't carry
-   * the token indexes when duplicating a Tree.
-   */
-  static final CommonTreeAdaptor adaptor = new CommonTreeAdaptor();
 }
 
 

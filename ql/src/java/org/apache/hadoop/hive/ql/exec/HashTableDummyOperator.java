@@ -25,7 +25,6 @@ import org.apache.hadoop.hive.ql.plan.HashTableDummyDesc;
 import org.apache.hadoop.hive.ql.plan.TableDesc;
 import org.apache.hadoop.hive.ql.plan.api.OperatorType;
 import org.apache.hadoop.hive.serde2.Deserializer;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 
 public class HashTableDummyOperator extends Operator<HashTableDummyDesc> implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -35,7 +34,7 @@ public class HashTableDummyOperator extends Operator<HashTableDummyDesc> impleme
     TableDesc tbl = this.getConf().getTbl();
     try {
       Deserializer serde = tbl.getDeserializerClass().newInstance();
-      SerDeUtils.initializeSerDe(serde, hconf, tbl.getProperties(), null);
+      serde.initialize(hconf, tbl.getProperties());
       this.outputObjInspector = serde.getObjectInspector();
       initializeChildren(hconf);
     } catch (Exception e) {

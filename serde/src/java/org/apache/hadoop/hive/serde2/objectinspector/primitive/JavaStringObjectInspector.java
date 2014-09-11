@@ -27,7 +27,7 @@ public class JavaStringObjectInspector extends
     AbstractPrimitiveJavaObjectInspector implements
     SettableStringObjectInspector {
 
-  protected JavaStringObjectInspector() {
+  JavaStringObjectInspector() {
     super(TypeInfoFactory.stringTypeInfo);
   }
 

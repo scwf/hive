@@ -29,7 +29,6 @@ import org.apache.hadoop.hive.metastore.api.Table;
 import org.apache.hadoop.hive.serde2.AbstractSerDe;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe;
 import org.apache.hadoop.io.BytesWritable;
 
@@ -249,7 +248,7 @@ public class DelimitedInputWriter extends AbstractRecordWriter {
       Properties tableProps = MetaStoreUtils.getTableMetadata(tbl);
       tableProps.setProperty("field.delim", String.valueOf(serdeSeparator));
       LazySimpleSerDe serde = new LazySimpleSerDe();
-      SerDeUtils.initializeSerDe(serde, conf, tableProps, null);
+      serde.initialize(conf, tableProps);
       return serde;
     } catch (SerDeException e) {
       throw new SerializationError("Error initializing serde", e);

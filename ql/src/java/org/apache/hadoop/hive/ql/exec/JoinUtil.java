@@ -32,7 +32,6 @@ import org.apache.hadoop.hive.ql.plan.TableDesc;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.SerDe;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.io.ShortWritable;
 import org.apache.hadoop.hive.serde2.lazybinary.LazyBinarySerDe;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -262,7 +261,7 @@ public class JoinUtil {
     SerDe sd = (SerDe) ReflectionUtils.newInstance(desc.getDeserializerClass(),
         null);
     try {
-      SerDeUtils.initializeSerDe(sd, null, desc.getProperties(), null);
+      sd.initialize(null, desc.getProperties());
     } catch (SerDeException e) {
       e.printStackTrace();
       return null;

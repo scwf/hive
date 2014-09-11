@@ -392,10 +392,6 @@ public class Driver implements CommandProcessor {
     }
     saveSession(queryState);
 
-    // generate new query id
-    String queryId = QueryPlan.makeQueryId();
-    conf.setVar(HiveConf.ConfVars.HIVEQUERYID, queryId);
-
     try {
       command = new VariableSubstitution().substitute(conf,command);
       ctx = new Context(conf);
@@ -438,9 +434,12 @@ public class Driver implements CommandProcessor {
       sem.validate();
       perfLogger.PerfLogEnd(CLASS_NAME, PerfLogger.ANALYZE);
 
-      plan = new QueryPlan(command, sem, perfLogger.getStartTime(PerfLogger.DRIVER_RUN), queryId);
+      plan = new QueryPlan(command, sem, perfLogger.getStartTime(PerfLogger.DRIVER_RUN));
 
+      String queryId = plan.getQueryId();
       String queryStr = plan.getQueryStr();
+
+      conf.setVar(HiveConf.ConfVars.HIVEQUERYID, queryId);
       conf.setVar(HiveConf.ConfVars.HIVEQUERYSTRING, queryStr);
 
       conf.set("mapreduce.workflow.id", "hive_" + queryId);
@@ -1221,7 +1220,7 @@ public class Driver implements CommandProcessor {
         }
       }
 
-      console.printInfo("Query ID = " + plan.getQueryId());
+
       int jobs = Utilities.getMRTasks(plan.getRootTasks()).size()
         + Utilities.getTezTasks(plan.getRootTasks()).size();
       if (jobs > 0) {

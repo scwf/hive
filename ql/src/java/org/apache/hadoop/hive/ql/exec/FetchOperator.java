@@ -51,7 +51,6 @@ import org.apache.hadoop.hive.ql.session.SessionState.LogHelper;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDeException;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.DelegatedObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.InspectableObject;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;
@@ -241,7 +240,7 @@ public class FetchOperator implements Serializable {
 
   private StructObjectInspector getRowInspectorFromTable(TableDesc table) throws Exception {
     Deserializer serde = table.getDeserializerClass().newInstance();
-    SerDeUtils.initializeSerDe(serde, job, table.getProperties(), null);
+    serde.initialize(job, table.getProperties());
     return createRowInspector(getStructOIFrom(serde.getObjectInspector()));
   }
 
@@ -262,7 +261,7 @@ public class FetchOperator implements Serializable {
   private StructObjectInspector getRowInspectorFromPartitionedTable(TableDesc table)
       throws Exception {
     Deserializer serde = table.getDeserializerClass().newInstance();
-    SerDeUtils.initializeSerDe(serde, job, table.getProperties(), null);
+    serde.initialize(job, table.getProperties());
     String pcols = table.getProperties().getProperty(
         org.apache.hadoop.hive.metastore.api.hive_metastoreConstants.META_TABLE_PARTITION_COLUMNS);
     String[] partKeys = pcols.trim().split("/");
@@ -428,15 +427,14 @@ public class FetchOperator implements Serializable {
 
       splitNum = 0;
       serde = partDesc.getDeserializer(job);
-      SerDeUtils.initializeSerDe(serde, job, partDesc.getTableDesc().getProperties(),
-                                 partDesc.getProperties());
+      serde.initialize(job, partDesc.getOverlayedProperties());
 
       if (currTbl != null) {
         tblSerde = serde;
       }
       else {
         tblSerde = currPart.getTableDesc().getDeserializerClass().newInstance();
-        SerDeUtils.initializeSerDe(tblSerde, job, currPart.getTableDesc().getProperties(), null);
+        tblSerde.initialize(job, currPart.getTableDesc().getProperties());
       }
 
       ObjectInspector outputOI = ObjectInspectorConverters.getConvertedOI(
@@ -450,9 +448,7 @@ public class FetchOperator implements Serializable {
       if (LOG.isDebugEnabled()) {
         LOG.debug("Creating fetchTask with deserializer typeinfo: "
             + serde.getObjectInspector().getTypeName());
-        LOG.debug("deserializer properties:\ntable properties: " +
-            partDesc.getTableDesc().getProperties() + "\npartition properties: " +
-            partDesc.getProperties());
+        LOG.debug("deserializer properties: " + partDesc.getOverlayedProperties());
       }
 
       if (currPart != null) {
@@ -708,7 +704,7 @@ public class FetchOperator implements Serializable {
       // Whenever a new partition is being read, a new converter is being created
       PartitionDesc partition = listParts.get(0);
       Deserializer tblSerde = partition.getTableDesc().getDeserializerClass().newInstance();
-      SerDeUtils.initializeSerDe(tblSerde, job, partition.getTableDesc().getProperties(), null);
+      tblSerde.initialize(job, partition.getTableDesc().getProperties());
 
       partitionedTableOI = null;
       ObjectInspector tableOI = tblSerde.getObjectInspector();
@@ -717,8 +713,7 @@ public class FetchOperator implements Serializable {
       for (PartitionDesc listPart : listParts) {
         partition = listPart;
         Deserializer partSerde = listPart.getDeserializer(job);
-        SerDeUtils.initializeSerDe(partSerde, job, partition.getTableDesc().getProperties(),
-                                   listPart.getProperties());
+        partSerde.initialize(job, listPart.getOverlayedProperties());
 
         partitionedTableOI = ObjectInspectorConverters.getConvertedOI(
             partSerde.getObjectInspector(), tableOI, oiSettableProperties);

@@ -20,7 +20,6 @@ package org.apache.hive.service.cli;
 
 import java.sql.DatabaseMetaData;
 
-import org.apache.hadoop.hive.common.type.HiveDecimal;
 import org.apache.hive.service.cli.thrift.TTypeId;
 
 /**
@@ -167,10 +166,40 @@ public enum Type {
    * Null is returned for data types where this is not applicable.
    */
   public Integer getNumPrecRadix() {
-    if (this.isNumericType()) {
+    switch (this) {
+    case TINYINT_TYPE:
+    case SMALLINT_TYPE:
+    case INT_TYPE:
+    case BIGINT_TYPE:
       return 10;
+    case FLOAT_TYPE:
+    case DOUBLE_TYPE:
+      return 2;
+    default:
+      // everything else (including boolean and string) is null
+      return null;
     }
-    return null;
+  }
+
+  /**
+   * The number of fractional digits for this type.
+   * Null is returned for data types where this is not applicable.
+   */
+  public Integer getDecimalDigits() {
+    switch (this) {
+    case BOOLEAN_TYPE:
+    case TINYINT_TYPE:
+    case SMALLINT_TYPE:
+    case INT_TYPE:
+    case BIGINT_TYPE:
+      return 0;
+    case FLOAT_TYPE:
+      return 7;
+    case DOUBLE_TYPE:
+      return 15;
+    default:
+      return null;
+    }
   }
 
   /**
@@ -178,7 +207,7 @@ public enum Type {
    * Returns null for non-numeric types.
    * @return
    */
-  public Integer getMaxPrecision() {
+  public Integer getPrecision() {
     switch (this) {
     case TINYINT_TYPE:
       return 3;
@@ -192,8 +221,57 @@ public enum Type {
       return 7;
     case DOUBLE_TYPE:
       return 15;
+    default:
+      return null;
+    }
+  }
+
+  /**
+   * Scale for this type.
+   */
+  public Integer getScale() {
+    switch (this) {
+    case BOOLEAN_TYPE:
+    case STRING_TYPE:
+    case DATE_TYPE:
+    case TIMESTAMP_TYPE:
+    case TINYINT_TYPE:
+    case SMALLINT_TYPE:
+    case INT_TYPE:
+    case BIGINT_TYPE:
+      return 0;
+    case FLOAT_TYPE:
+      return 7;
+    case DOUBLE_TYPE:
+      return 15;
     case DECIMAL_TYPE:
-      return HiveDecimal.MAX_PRECISION;
+      return Integer.MAX_VALUE;
+    default:
+      return null;
+    }
+  }
+
+  /**
+   * The column size for this type.
+   * For numeric data this is the maximum precision.
+   * For character data this is the length in characters.
+   * For datetime types this is the length in characters of the String representation
+   * (assuming the maximum allowed precision of the fractional seconds component).
+   * For binary data this is the length in bytes.
+   * Null is returned for for data types where the column size is not applicable.
+   */
+  public Integer getColumnSize() {
+    if (isNumericType()) {
+      return getPrecision();
+    }
+    switch (this) {
+    case STRING_TYPE:
+    case BINARY_TYPE:
+      return Integer.MAX_VALUE;
+    case DATE_TYPE:
+      return 10;
+    case TIMESTAMP_TYPE:
+      return 30;
     default:
       return null;
     }

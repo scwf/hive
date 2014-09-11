@@ -35,7 +35,6 @@ import org.apache.hadoop.hive.common.type.HiveDecimal;
 import org.apache.hadoop.hive.common.type.HiveVarchar;
 import org.apache.hadoop.hive.conf.HiveConf;
 import org.apache.hadoop.hive.serde.serdeConstants;
-import org.apache.hadoop.hive.serde2.SerDeUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.slf4j.Logger;
@@ -144,10 +143,10 @@ public class TestJsonSerDe extends TestCase {
       HCatRecord r = e.second;
 
       HCatRecordSerDe hrsd = new HCatRecordSerDe();
-      SerDeUtils.initializeSerDe(hrsd, conf, tblProps, null);
+      hrsd.initialize(conf, tblProps);
 
       JsonSerDe jsde = new JsonSerDe();
-      SerDeUtils.initializeSerDe(jsde, conf, tblProps, null);
+      jsde.initialize(conf, tblProps);
 
       LOG.info("ORIG:{}", r);
 
@@ -196,10 +195,10 @@ public class TestJsonSerDe extends TestCase {
       LOG.info("modif tbl props:{}", internalTblProps);
 
       JsonSerDe wjsd = new JsonSerDe();
-      SerDeUtils.initializeSerDe(wjsd, conf, internalTblProps, null);
+      wjsd.initialize(conf, internalTblProps);
 
       JsonSerDe rjsd = new JsonSerDe();
-      SerDeUtils.initializeSerDe(rjsd, conf, tblProps, null);
+      rjsd.initialize(conf, tblProps);
 
       LOG.info("ORIG:{}", r);
 
@@ -267,7 +266,7 @@ public class TestJsonSerDe extends TestCase {
     props.put(serdeConstants.LIST_COLUMNS, "s,k");
     props.put(serdeConstants.LIST_COLUMN_TYPES, "struct<a:int,b:string>,int");
     JsonSerDe rjsd = new JsonSerDe();
-    SerDeUtils.initializeSerDe(rjsd, conf, props, null);
+    rjsd.initialize(conf, props);
 
     Text jsonText = new Text("{ \"x\" : \"abc\" , "
         + " \"t\" : { \"a\":\"1\", \"b\":\"2\", \"c\":[ { \"x\":2 , \"y\":3 } , { \"x\":3 , \"y\":2 }] } ,"
