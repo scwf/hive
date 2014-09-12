@@ -522,6 +522,7 @@
                   <include>org.spark-project.hive:hive-exec</include>
                   <include>org.spark-project.hive:hive-serde</include>
                   <include>com.esotericsoftware.kryo:kryo</include>
+                  <include>com.twitter:parquet-hadoop-bundle</include>
                   <include>org.spark-project.hive.shims:hive-shims-0.20</include>
                   <include>org.spark-project.hive.shims:hive-shims-0.20S</include>
                   <include>org.spark-project.hive.shims:hive-shims-0.23</include>
@@ -533,7 +534,7 @@
               <relocations>
                 <relocation>
                   <pattern>com.esotericsoftware</pattern>
-                  <shadedPattern>org.spark-project.hive.com.esotericsoftware</shadedPattern>
+                  <shadedPattern>org.apache.hive.com.esotericsoftware</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
