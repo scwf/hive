@@ -521,6 +521,7 @@
                   <include>org.spark-project.hive:hive-common</include>
                   <include>org.spark-project.hive:hive-exec</include>
                   <include>org.spark-project.hive:hive-serde</include>
+                  <include>com.esotericsoftware.kryo:kryo</include>
                   <include>org.spark-project.hive.shims:hive-shims-0.20</include>
                   <include>org.spark-project.hive.shims:hive-shims-0.20S</include>
                   <include>org.spark-project.hive.shims:hive-shims-0.23</include>
