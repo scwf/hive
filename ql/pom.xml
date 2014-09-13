@@ -522,6 +522,11 @@
                   <include>org.spark-project.hive:hive-exec</include>
                   <include>com.esotericsoftware.kryo:kryo</include>
                 </includes>
+                <excludes>
+                  <exclude>com.googlecode:minlog</exclude>
+                  <exclude>org.objenesis:objenesis</exclude>
+                  <exclude>org.objenesis:objenesis</exclude>
+                </excludes>
               </artifactSet>
               <relocations>
                 <relocation>
