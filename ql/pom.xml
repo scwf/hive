@@ -520,6 +520,7 @@
                   <!-- order is meant to be the same as the ant build -->
                   <include>org.spark-project.hive:hive-common</include>
                   <include>org.spark-project.hive:hive-exec</include>
+                  <include>com.esotericsoftware.kryo:kryo</include>
                 </includes>
               </artifactSet>
               <relocations>
